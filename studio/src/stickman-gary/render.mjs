@@ -1,0 +1,15 @@
+// node render.mjs <epRoot-with-data> <ep> sheet out.jpg step | frames dir "t1,t2" | cues | video out.mp4 [fps]
+import { createRequire } from 'node:module';const { chromium } = createRequire(process.env.PW_FROM||'/')('playwright');import http from 'node:http';import fs from 'node:fs';import path from 'node:path';import { spawn } from 'node:child_process';
+const here=path.dirname(new URL(import.meta.url).pathname),studio=path.resolve(here,'../..');const [root,ep,mode,...a]=process.argv.slice(2);
+const srv=http.createServer((q,r)=>{const u=decodeURIComponent(q.url.split('?')[0]);let f=u==='/'?path.join(here,'index.html'):u.startsWith('/data/')?path.join(root,u):path.join(studio,u);
+ if(!fs.existsSync(f)){r.writeHead(404);r.end();return}r.writeHead(200,{'Content-Type':f.endsWith('.js')?'text/javascript':f.endsWith('.html')?'text/html':'application/octet-stream'});fs.createReadStream(f).pipe(r)}).listen(0);
+const port=srv.address().port;const b=await chromium.launch();const p=await b.newPage({viewport:{width:1080,height:1920}});p.on('pageerror',e=>console.error('PAGEERR',e));p.on('console',m=>m.type()==='error'&&console.error(m.text()));
+await p.goto(`http://127.0.0.1:${port}/?ep=${ep}`);await p.waitForFunction('window.ready',{timeout:20000});
+const shot=async(t,q=.96)=>Buffer.from((await p.evaluate(([t,q])=>{window.draw(t);return document.getElementById('c').toDataURL('image/jpeg',q).split(',')[1]},[t,q])),'base64');
+if(mode==='cues'){const j=await p.evaluate(()=>({duration:window.DUR,cues:window.cues}));fs.writeFileSync(path.join(root,'data/cues.json'),JSON.stringify(j));console.log(j.cues.length,'cues')}
+if(mode==='frames'){fs.mkdirSync(a[0],{recursive:true});for(const t of a[1].split(','))fs.writeFileSync(`${a[0]}/f${(+t).toFixed(2)}.jpg`,await shot(+t))}
+if(mode==='sheet'){const step=+(a[1]||1),D=await p.evaluate('window.DUR');const dir=a[0]+'.d';fs.mkdirSync(dir,{recursive:true});let i=0;for(let t=0;t<D;t+=step)fs.writeFileSync(`${dir}/${String(i++).padStart(3,'0')}.jpg`,await shot(t,.7));
+ const cols=+(a[2]||8);await new Promise(r=>spawn('ffmpeg',['-nostdin','-v','error','-y','-framerate','1','-i',`${dir}/%03d.jpg`,'-vf',`scale=216:-1,drawtext=text='%{eif\\:n*${step}\\:d}':x=6:y=6:fontsize=22:fontcolor=white:box=1:boxcolor=black,tile=${cols}x${Math.ceil(i/cols)}`,'-frames:v','1',a[0]],{stdio:'inherit'}).on('close',r))}
+if(mode==='video'){const fps=+(a[1]||24),D=await p.evaluate('window.DUR'),n=Math.round(D*fps);const f=spawn('ffmpeg',['-nostdin','-v','error','-y','-f','image2pipe','-c:v','mjpeg','-r',String(fps),'-i','-','-i',path.join(root,'data/mix.wav'),'-c:v','libx264','-crf','16','-preset','medium','-pix_fmt','yuv420p','-c:a','aac','-b:a','192k','-shortest',a[0]],{stdio:['pipe','inherit','inherit']});
+ for(let i=0;i<n;i++){const j=await shot(i/fps);if(!f.stdin.write(j))await new Promise(r=>f.stdin.once('drain',r));if(i%120==0)console.log(i,n)}f.stdin.end();await new Promise(r=>f.on('close',r));console.log('done')}
+await b.close();srv.close();
