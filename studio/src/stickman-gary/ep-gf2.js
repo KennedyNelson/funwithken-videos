@@ -1,9 +1,9 @@
 // 2026-11-06 IG reel "cool boyfriend": girlfriend confesses, Kalu is proud, the boy walks by. Bright park bench, no SFX, no extra text but setup line + captions.
 import {W,H,INK,bind,setBoil,ease,back,lerp,clamp,line,shape,rect,oval,dot,text,star,drop,man,face,walk,caption,groupWords,finish,ring} from './engine.js';
-export const DUR=14.33;
+export const DUR=13.91;
 const SKY='#BFE4F5',GRASS='#8FD16A',GRASS2='#6FBB55',PATH='#E8D4A0',YEL='#F7D84A';
 const FLOOR=1300,SEAT=FLOOR-160;let c,groups=[],words=[];
-const KEYS=/^(slept|know\.|past\.|care|chutiye|saath\?|guy\.\.\.)$/i;
+const KEYS=/^(slept|know\.|past\.|care|gaandu|saath\?|guy\.\.\.)$/i;
 let LS=[],LE=[],tSlept=0;
 export function init(ctxx,w){c=ctxx;bind(c);words=w;groups=groupWords(w);for(let i=0;i<6;i++){const ws=w.filter(x=>x.line===i);LS[i]=ws[0].s;LE[i]=ws[ws.length-1].e}tSlept=w.filter(x=>x.line===4&&x.w==='slept')[0].s}
 const pr=(t,a,b)=>clamp((t-a)/(b-a));

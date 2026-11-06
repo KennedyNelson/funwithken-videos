@@ -21,6 +21,10 @@ for i,(sp,txt) in enumerate(L):
         k=j
     y=np.concatenate(o)
     if i==4: y[-int(.02*SR):]*=np.linspace(1,0,int(.02*SR))  # hard cut-off
+    SPD=[1,1,1,1.18,1,1]
+    if SPD[i]!=1:
+        wavfile.write('data/sp_in.wav',SR,(y*32767).astype(np.int16)); subprocess.run(['ffmpeg','-nostdin','-v','error','-y','-i','data/sp_in.wav','-filter:a',f'atempo={SPD[i]}','data/sp_out.wav'],check=True)
+        _,y=wavfile.read('data/sp_out.wav'); y=y.astype(float)/32768
     y=y/np.sqrt((y**2).mean())*.09
     e=np.convolve(np.abs(y),np.ones(h)/h,'same'); voiced=e>e.max()*.07; cum=np.cumsum(voiced)/SR; tot=cum[-1]
     words=txt.split(); w8=[len(re.sub(r'\W','',w))+1.5 for w in words]; c=0
