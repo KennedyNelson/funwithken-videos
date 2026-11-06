@@ -182,7 +182,7 @@ export function draw(t){setBoil(Math.floor(t*10));c.save();c.setTransform(1,0,0,
   cam(1.3,SX-80+u*1500,ROAD-340,0,t,()=>{street(sc);c.save();c.translate(SX,ROAD);girlsRide(t,1);c.restore()});
   c.save();c.globalAlpha=.6;for(let i=0;i<12;i++)line([[-100,200+i*150],[W+100,200+i*150]],24,'#FFFFFF',1);c.restore();
  }else{ // scene 2: the boys, then the get-off (camera pulls back to show everybody)
-  const pull=ease(pr(t,BR,BR+1.1)),push=pr(t,TB,BR);
+  const pull=ease(pr(t,BR,BR+1.1)),push=pr(t,TB,Math.min(BR,DUR));
   const z=lerp(lerp(1.12,1.28,push),1.0,pull),cx=lerp(SX-30,SX-110,pull),cy=lerp(ROAD-300,ROAD-230,pull);
   cam(z,cx,cy,t<BR?2:0,t,()=>{street(sc);c.save();c.translate(SX,ROAD);boysScene(t);c.restore()});
   if(t<BR)speedLines(t,ROAD-420,6,300,.45);
