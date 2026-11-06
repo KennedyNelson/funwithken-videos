@@ -1,0 +1,70 @@
+{
+ "title": "A Tadpole Is Causing Your Hiccups",
+ "voice": "Liam + Bill (ElevenLabs)",
+ "speed": 1,
+ "lead": 0.15,
+ "outro": 0.25,
+ "gap": 0.1,
+ "music": "bed",
+ "sources": [
+  "Straus et al., BioEssays 2003, 'A phylogenetic hypothesis for the origin of hiccough' (gill-ventilation motor pattern, glottal closure)",
+  "Neil Shubin, Your Inner Fish, excerpt on hiccups and tadpoles (Panda's Thumb, 2008)",
+  "Scientific American, 'What causes hiccups?' (Whitelaw)",
+  "UCL News, 12 Nov 2019, 'Newborn baby hiccups could be key to brain development' (Whitehead et al., Clinical Neurophysiology; 13 infants; womb from nine weeks)",
+  "Smithsonian Magazine, Charles Osborne hiccuped 1922-1990, est. 430 million; Guinness World Records 2023, more than 420 million"
+ ],
+ "lines": [
+  {
+   "text": "There's a tadpole in your throat, and it just ruined your meeting.",
+   "caps": "THERE'S A *TADPOLE | IN YOUR *THROAT | AND IT JUST *RUINED | YOUR *MEETING"
+  },
+  {
+   "text": "Water incoming! Shut the gate!",
+   "caps": "WATER *INCOMING! | SHUT THE *GATE!"
+  },
+  {
+   "text": "This is Grandpa Tadpole. Well, sort of.",
+   "caps": "THIS IS *GRANDPA | *TADPOLE | WELL, SORT *OF"
+  },
+  {
+   "text": "A hiccup is one sharp gulp of air, then your throat slams shut. Hic!",
+   "caps": "A *HICCUP IS | ONE SHARP *GULP | OF *AIR | THEN YOUR *THROAT | *SLAMS SHUT | *HIC!"
+  },
+  {
+   "text": "Tadpoles do that exact move. They close a little gate, so water stays out of their lungs while their gills work.",
+   "caps": "*TADPOLES DO | THAT EXACT *MOVE | THEY *CLOSE | A LITTLE *GATE | SO *WATER | STAYS *OUT | OF THEIR *LUNGS | WHILE THEIR *GILLS | *WORK"
+  },
+  {
+   "text": "Scientists think we inherited that ancient wiring, and it never got the memo that you live on land.",
+   "caps": "*SCIENTISTS THINK | WE *INHERITED | THAT ANCIENT *WIRING | AND IT *NEVER | GOT THE *MEMO | THAT YOU LIVE | ON *LAND"
+  },
+  {
+   "text": "What's land?",
+   "caps": "WHAT'S *LAND?"
+  },
+  {
+   "text": "One farmer hiccuped for sixty-eight years. That's over four hundred million hics.",
+   "caps": "ONE *FARMER | *HICCUPED FOR | 68 *YEARS | THAT'S *OVER | 400 *MILLION | *HICS"
+  },
+  {
+   "text": "My best work.",
+   "caps": "MY BEST *WORK"
+  },
+  {
+   "text": "But here's the twist. Babies start hiccuping in the womb, at nine weeks. And one small study suggests each hic may teach a newborn's brain how to breathe.",
+   "caps": "BUT HERE'S THE *TWIST | *BABIES START | *HICCUPING | IN THE *WOMB | AT NINE *WEEKS | AND ONE *SMALL | STUDY *SUGGESTS | EACH HIC *MAY | *TEACH A | NEWBORN'S *BRAIN | HOW TO *BREATHE"
+  },
+  {
+   "text": "You're welcome.",
+   "caps": "YOU'RE *WELCOME"
+  },
+  {
+   "text": "So next time your meeting goes silent...",
+   "caps": "SO NEXT *TIME | YOUR *MEETING | GOES *SILENT"
+  },
+  {
+   "text": "Water incoming! Shut the gate!",
+   "caps": "WATER *INCOMING! | SHUT THE *GATE!"
+  }
+ ]
+}
