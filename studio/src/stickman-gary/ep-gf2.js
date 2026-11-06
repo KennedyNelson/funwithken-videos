@@ -1,6 +1,6 @@
 // 2026-11-06 IG reel "cool boyfriend": girlfriend confesses, Kalu is proud, the boy walks by. Bright park bench, no SFX, no extra text but setup line + captions.
 import {W,H,INK,bind,setBoil,ease,back,lerp,clamp,line,shape,rect,oval,dot,text,star,drop,man,face,walk,caption,groupWords,finish,ring} from './engine.js';
-export const DUR=13.91;
+export const DUR=14.67;
 const SKY='#BFE4F5',GRASS='#8FD16A',GRASS2='#6FBB55',PATH='#E8D4A0',YEL='#F7D84A';
 const FLOOR=1300,SEAT=FLOOR-160;let c,groups=[],words=[];
 const KEYS=/^(slept|know\.|past\.|care|gaandu|saath\?|guy\.\.\.)$/i;

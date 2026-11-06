@@ -2,7 +2,7 @@ import numpy as np, json, subprocess, re, sys; sys.path.insert(0,"../..")
 from scipy.io import wavfile
 SR=44100
 L=json.load(open('lines.json'))
-CAP=[.18,.2,.15,.2,.15,.2]; GAP=[.1,.1,.08,.1,.04,.0]   # gap AFTER line; l2->l3 is immediate
+CAP=[.18,.2,.15,.2,.15,.38]; GAP=[.1,.1,.08,.1,.04,.0]   # gap AFTER line; l2->l3 is immediate
 T=[];W=[];out=[];t=.5
 for i,(sp,txt) in enumerate(L):
     subprocess.run(['ffmpeg','-nostdin','-v','error','-y','-i',f'raw/{i+1:02d}.mp3','-ac','1','-ar',str(SR),f'data/l{i}.wav'],check=True)
