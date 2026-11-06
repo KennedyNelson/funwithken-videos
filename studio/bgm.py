@@ -66,3 +66,32 @@ def make_epic(sec):
         t+=d; bar+=1
     ramp=np.linspace(.35,1,N)**1.2; fade=np.minimum(1,np.arange(N)/(SR*.5))
     y=y*ramp*fade; return y/np.abs(y).max()*.9
+
+def make_inspire(sec):
+    """Uplifting 'never give up' cue that hits on the first sample: impact + rising I-V-vi-IV in C, piano arpeggio, strings, soaring bell melody, building drums."""
+    N=int(sec*SR); y=np.zeros(N); bpm=96; beat=60/bpm
+    def add(x,at,v):
+        i=int(at*SR)
+        if 0<=i<N: x=x[:N-i]; y[i:i+len(x)]+=x*v
+    # impact on the cut
+    n=int(1.6*SR); tt=np.arange(n)/SR
+    boom=np.sin(2*np.pi*(38+70*np.exp(-tt*9))*tt)*np.exp(-tt*2.6); add(boom,0,1.0)
+    nz=np.random.default_rng(3).standard_normal(n); nz=np.convolve(nz,np.ones(40)/40,'same'); add(nz*np.exp(-tt*3),0,.5)
+    chords=[[60,64,67],[55,59,62],[57,60,64],[53,57,60]]   # C G Am F
+    t=0;bar=0
+    while t<sec:
+        ch=chords[bar%4]; d=beat*4
+        for m in ch:
+            k=np.arange(int(d*1.15*SR))/SR
+            st=sum(np.sin(2*np.pi*nf(m+o)*k*(1+j*.004)) for o,j in[(0,0),(12,1),(12,-1),(-12,0)])/4
+            add(st*np.minimum(1,k/.7)*np.exp(-np.maximum(0,k-d)*5),t,.3)
+        add(tone(nf(ch[0]-24),d,'bass'),t,.5)
+        arp=[0,1,2,1,2,1,2,1]
+        for b in range(8): add(tone(nf(ch[arp[b]]+12),beat,'marimba'),t+b*beat/2,.25)
+        mel=[ch[2]+12,ch[2]+14,ch[2]+16,ch[2]+12] if bar%2==0 else [ch[1]+19,ch[2]+17,ch[2]+16,ch[2]+12]
+        for b,mn in enumerate(mel): add(tone(nf(mn+12),beat*1.2,'bell' if False else 'marimba'),t+b*beat,.22+.03*b)
+        for b in range(4): add(kick(),t+b*beat,.5 if bar>=1 else .35)
+        if bar>=2:
+            for b in range(8): add(hat(),t+b*beat/2,.3)
+        t+=d; bar+=1
+    ramp=np.linspace(.75,1,N); y=y*ramp; return y/np.abs(y).max()*.92
