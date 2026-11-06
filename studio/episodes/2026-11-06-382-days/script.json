@@ -1,0 +1,46 @@
+{
+ "title": "He Didn't Eat for 382 Days",
+ "voices": "George (narrator) + Callum (Stomach), ElevenLabs eleven_v3",
+ "music": "bed",
+ "lines": [
+  [
+   "N",
+   "[deadpan] A man once went three hundred and eighty-two days without real food."
+  ],
+  [
+   "S",
+   "[weak, dramatic] Day three. Hello? Anyone?"
+  ],
+  [
+   "N",
+   "[amused] Scottish, twenty-seven, with doctors watching the whole time."
+  ],
+  [
+   "S",
+   "[grumpy] I'd like to speak to a manager."
+  ],
+  [
+   "N",
+   "Water, vitamins, and not one lunch. He lost over a hundred kilos."
+  ],
+  [
+   "S",
+   "[weak] Day two hundred. I'm talking to a spoon."
+  ],
+  [
+   "N",
+   "[warm] Five years later, he'd kept most of it off."
+  ],
+  [
+   "N",
+   "[gentle, serious] Please don't try this. He had a hospital. You have a fridge."
+  ],
+  [
+   "S",
+   "[hopeful] Fridge?"
+  ]
+ ],
+ "sources": [
+  "IFLScience, 'How did a man survive without eating food for 382 days' (cites Stewart & Fleming, Postgraduate Medical Journal, 1973: 27-year-old Scottish man, 206 kg to 81 kg, 88 kg five years later, supervised at Dundee, potassium/sodium/vitamin supplements and small amount of yeast)"
+ ]
+}
