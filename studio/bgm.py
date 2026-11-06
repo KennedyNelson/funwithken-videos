@@ -42,3 +42,27 @@ def make(name,sec):
     y=y[:int(sec*SR)+int(.2*SR)]; return y/np.abs(y).max()*p['gain']
 if __name__=='__main__':
     y=make(sys.argv[1],float(sys.argv[2])); wavfile.write(sys.argv[3],SR,(y*32767).astype(np.int16))
+
+def make_epic(sec):
+    """Cinematic motivating build: swelling pad chords + bell arpeggio + heartbeat kicks + low bass, crescendo. Starts quiet, ends big."""
+    N=int(sec*SR); y=np.zeros(N); bpm=84; beat=60/bpm
+    def add(x,at,v):
+        i=int(at*SR)
+        if 0<=i<N: x=x[:N-i]; y[i:i+len(x)]+=x*v
+    chords=[[57,60,64],[53,57,60],[48,55,64],[55,59,62]]  # Am F C G
+    t=0;bar=0
+    while t<sec:
+        ch=chords[bar%4]; d=beat*4
+        for m in ch:
+            tt=np.arange(int(d*1.2*SR))/SR
+            pad=sum(np.sin(2*np.pi*nf(m+o)*tt*(1+k*.003)) for o,k in[(0,0),(12,1),(0,-1)])/3
+            env=np.minimum(1,tt/1.2)*np.exp(-np.maximum(0,tt-d)*4)
+            add(pad*env,t,.35)
+        add(tone(nf(ch[0]-24),d,'bass'),t,.5)
+        for b in range(8):
+            n=ch[[0,1,2,1,2,1,0,1][b]]+12
+            add(tone(nf(n+12),beat,'marimba'),t+b*beat/2,.22)
+        for b in range(4): add(kick(),t+b*beat,.55 if bar>=1 else .3)
+        t+=d; bar+=1
+    ramp=np.linspace(.35,1,N)**1.2; fade=np.minimum(1,np.arange(N)/(SR*.5))
+    y=y*ramp*fade; return y/np.abs(y).max()*.9
