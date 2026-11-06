@@ -56,6 +56,7 @@ export function face(o){
   if(hair==='afro'){const f=o.hairFill||'#3a2a22';for(let i=0;i<12;i++){const a=3.3+i/11*2.85;oval(Math.cos(a)*r*.92,Math.sin(a)*r*1.05,r*.34,r*.32,f,lw*.7,INK,1.6)}}
   const s=o.eye||1, b=r*.34*s, ey=-r*.2, ex2=r*.33*s*.98, lk=o.look||[0,0];
   if(o.eyes==='dots'){dot(-r*.3,ey,r*.075);dot(r*.3,ey,r*.075)}
+  else if(o.eyes==='closed'){for(const q of[-1,1]){const X=q*r*.33;line([[X-r*.16,ey-r*.02],[X,ey+r*.06],[X+r*.16,ey-r*.02]],lw*.9,INK,.6)}}
   else if(o.eyes==='x'){for(const q of[-1,1]){const X=q*r*.32;line([[X-r*.12,ey-r*.12],[X+r*.12,ey+r*.12]],lw,INK,.6);line([[X+r*.12,ey-r*.12],[X-r*.12,ey+r*.12]],lw,INK,.6)}}
   else{for(const q of[-1,1]){const X=q*ex2,R=b;oval(X,ey,R,R*1.12,'#FFFFFF',lw,INK,1.4);if(o.veins)veins(X,ey,R);const pr=R*(o.pupil||.34);dot(X+lk[0]*R*.45,ey+lk[1]*R*.45,pr)}}
   // nose bump
@@ -91,8 +92,11 @@ export function man(o){
   if(o.badge){rect(shX-26,shY+70,52,40,'#FFFFFF',lw/s*.55,INK,.6)}
   arm(A[1]);
   c.save();c.translate(shX,shY-(o.neck||70)-r*.72);c.rotate((o.tilt||0));
+  const nd=o.nod||0;if(nd){c.translate(0,r*.42*nd);c.scale(1,1-.34*nd)}   // head dropping forward (front view): lower + foreshortened
   line([[0,r*.74],[0,r*1.04+ (o.neck||70)*.3]],lw/s,INK,1);
-  face({...o.face,r,skin:sk,lw:lw/s});c.restore();
+  face({...o.face,r,skin:sk,lw:lw/s});
+  if(nd&&o.face&&o.face.hairFill){const ye=-r*.6+nd*r*.5,f=o.face.hairFill;shape([[-r*.93,ye+r*.12],[-r*.97,-r*.9],[-r*.45,-r*1.28],[r*.5,-r*1.32],[r*.97,-r*.9],[r*.93,ye+r*.12],[r*.5,ye+r*.2],[0,ye+r*.07],[-r*.5,ye+r*.2]],f,lw/s,INK,1.6)}
+  c.restore();
   c.restore();
 }
 export const walk=(ph,amp=1)=>{const a=Math.sin(ph),b=Math.sin(ph+Math.PI);return{legs:[[a*70*amp,-150,a*120*amp,-Math.max(0,Math.cos(ph))*50],[b*70*amp,-150,b*120*amp,-Math.max(0,-Math.cos(ph))*50]],arms:[[-40+b*30,110,-60+b*110*amp,185],[40+a*30,110,60+a*110*amp,185]],hop:Math.abs(Math.cos(ph))*16}};

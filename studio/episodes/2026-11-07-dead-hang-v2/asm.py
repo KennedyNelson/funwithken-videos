@@ -34,7 +34,7 @@ for i,(sp,txt) in enumerate(L):
     T.append(dict(line=i,sp=sp,start=round(t,3),end=round(t+len(y)/SR,3),text=txt))
     out+=[y,np.zeros(int(GAP[i]*SR))]; t+=len(y)/SR+GAP[i]
 y=np.concatenate([np.zeros(int(.5*SR))]+out+[np.zeros(int(.35*SR))]); N=len(y)
-LASTEND=T[-1]['end']; TM=LASTEND-.25; TAIL=3.7
+LASTEND=T[-1]['end']; TM=LASTEND-.25; TAIL=3.4
 y=np.concatenate([y[:int((LASTEND+.3)*SR)] if False else y,np.zeros(int((TAIL)*SR))]) if False else y
 N=int((LASTEND+.3+TAIL)*SR); y=np.pad(y,(0,max(0,N-len(y))))[:N]
 from bgm import make_epic
