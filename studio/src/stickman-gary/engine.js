@@ -50,17 +50,17 @@ export function face(o){
   const ex=o.ear!==false?1:0;
   if(ex){oval(-r*(k==='egg'?.84:1.08),r*.12,r*.14,r*.19,sk,lw,INK,1.4)}
   shape(pts,sk,lw,INK,2.2);
-  const hair=o.hair;
+  const hair=o.hair, ha=o.hairStill?0:1;
   if(hair==='strand'){const w=o.strandWave||0;line([[r*.05,-r*1.04],[r*.14,-r*1.36],[r*.38+w*r*.3,-r*1.42+Math.abs(w)*r*.1],[r*.6+w*r*.5,-r*1.2]],lw*.8,INK,1.2)}
-  if(hair==='quiff'){const f=o.hairFill||'#E8772E';shape([[-r*.92,-r*.3],[-r*.9,-r*.86],[-r*.3,-r*1.2],[r*.5,-r*1.5],[r*1.3,-r*1.34],[r*.9,-r*.95],[r*.98,-r*.42],[r*.4,-r*.74],[-r*.3,-r*.68]],f,lw,INK,2)}
+  if(hair==='quiff'){const f=o.hairFill||'#E8772E';shape([[-r*.92,-r*.3],[-r*.9,-r*.86],[-r*.3,-r*1.2],[r*.5,-r*1.5],[r*1.3,-r*1.34],[r*.9,-r*.95],[r*.98,-r*.42],[r*.4,-r*.74],[-r*.3,-r*.68]],f,lw,INK,2*ha)}
   if(hair==='afro'){const f=o.hairFill||'#3a2a22';for(let i=0;i<12;i++){const a=3.3+i/11*2.85;oval(Math.cos(a)*r*.92,Math.sin(a)*r*1.05,r*.34,r*.32,f,lw*.7,INK,1.6)}}
-  if(hair==='part'){const f=o.hairFill||'#2A1D16';shape([[-r*.86,-r*.25],[-r*.95,-r*.8],[-r*.55,-r*1.12],[r*.1,-r*1.2],[r*.7,-r*1.08],[r*.98,-r*.7],[r*.9,-r*.3],[r*.6,-r*.72],[-r*.05,-r*.8],[-r*.4,-r*.62]],f,lw,INK,1.6);line([[-r*.38,-r*1.12],[-r*.3,-r*.72]],lw*.5,'#5a463a',.6)}
+  if(hair==='part'){const f=o.hairFill||'#2A1D16';shape([[-r*.86,-r*.25],[-r*.95,-r*.8],[-r*.55,-r*1.12],[r*.1,-r*1.2],[r*.7,-r*1.08],[r*.98,-r*.7],[r*.9,-r*.3],[r*.6,-r*.72],[-r*.05,-r*.8],[-r*.4,-r*.62]],f,lw,INK,1.6*ha);line([[-r*.38,-r*1.12],[-r*.3,-r*.72]],lw*.5,'#5a463a',.6*ha)}
   const s=o.eye||1, b=r*.34*s, ey=-r*.2, ex2=r*.33*s*.98, lk=o.look||[0,0];
   if(o.eyes==='dots'){dot(-r*.3,ey,r*.075);dot(r*.3,ey,r*.075)}
   else if(o.eyes==='closed'){for(const q of[-1,1]){const X=q*r*.33;line([[X-r*.16,ey-r*.02],[X,ey+r*.06],[X+r*.16,ey-r*.02]],lw*.9,INK,.6)}}
   else if(o.eyes==='x'){for(const q of[-1,1]){const X=q*r*.32;line([[X-r*.12,ey-r*.12],[X+r*.12,ey+r*.12]],lw,INK,.6);line([[X+r*.12,ey-r*.12],[X-r*.12,ey+r*.12]],lw,INK,.6)}}
   else{for(const q of[-1,1]){const X=q*ex2,R=b;oval(X,ey,R,R*1.12,'#FFFFFF',lw,INK,1.4);if(o.veins)veins(X,ey,R);const pr=R*(o.pupil||.34);dot(X+lk[0]*R*.45,ey+lk[1]*R*.45,pr)}}
-  if(o.specs){const R=b*1.12,fr=o.specCol||'#141414';for(const q of[-1,1]){const X=q*ex2;c.save();c.beginPath();c.roundRect(X-R,ey-R*.92,R*2,R*1.84,R*.45);c.lineWidth=lw*1.25;c.strokeStyle=fr;c.stroke();c.fillStyle='rgba(180,220,255,.18)';c.fill();c.restore()}line([[-ex2+R,ey-R*.2],[ex2-R,ey-R*.2]],lw*1.1,fr,.4);line([[-ex2-R,ey-R*.3],[-r*.84,ey-R*.1]],lw,fr,.4);line([[ex2+R,ey-R*.3],[r*.84,ey-R*.1]],lw,fr,.4)}
+  if(o.specs){const R=b*(o.specs==='thin'?1.02:1.12),fr=o.specCol||'#141414',th=o.specs==='thin';for(const q of[-1,1]){const X=q*ex2;c.save();c.beginPath();if(th)c.ellipse(X,ey,R*1.05,R*.88,0,0,7);else c.roundRect(X-R,ey-R*.92,R*2,R*1.84,R*.45);c.lineWidth=lw*(th?.62:1.25);c.strokeStyle=fr;c.stroke();if(!th){c.fillStyle='rgba(180,220,255,.18)';c.fill()}c.restore()}const lt=th?lw*.6:lw;line([[-ex2+R,ey-R*.15],[ex2-R,ey-R*.15]],lt,fr,0);line([[-ex2-R,ey-R*.2],[-r*.84,ey-R*.05]],lt,fr,0);line([[ex2+R,ey-R*.2],[r*.84,ey-R*.05]],lt,fr,0)}
   // nose bump
   if(o.nose!==false)oval(r*.03,r*.16+ (s-1)*r*.2,r*.13,r*.1,sk,lw*.85,INK,1.1);
   // brows
