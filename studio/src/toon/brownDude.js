@@ -1,102 +1,152 @@
-// BROWN DUDE: our recurring fitness / body-science character (style: "Clean Fitness Line Art", see shorts-animation-styles).
-// Front view, feet at (0,0), about 1000 units tall at s=1. Flat warm-brown skin, thin black line art with muscle definition,
-// smooth bald almond head, white slit eyes with a built-in angled brow, no nose, tiny mouth only when talking.
-// Signature kit: black training shorts with a saffron waistband, black wrist wraps. Never yellow, never a copy of another channel's mascot.
-import { ctx, mix, smooth } from './toon.js';
-export const BD = { skin: '#A8693F', shade: '#8C5532', hi: '#C4875A', line: '#161210', shorts: '#26272B', shortsHi: '#3A3C42', band: '#F08A24', wrap: '#1E1E22' };
-const LW = 4.5;
-function P(c, pts, fill, lw = LW) { c.beginPath(); c.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length; i++) { const p = pts[i]; if (p.length === 4) c.quadraticCurveTo(p[0], p[1], p[2], p[3]); else c.lineTo(p[0], p[1]) } c.closePath(); if (fill) { c.fillStyle = fill; c.fill() } if (lw) { c.lineWidth = lw; c.strokeStyle = BD.line; c.lineJoin = 'round'; c.stroke() } }
-function L(c, pts, lw = 3) { c.beginPath(); c.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length; i++) { const p = pts[i]; if (p.length === 4) c.quadraticCurveTo(p[0], p[1], p[2], p[3]); else c.lineTo(p[0], p[1]) } c.lineWidth = lw; c.lineCap = 'round'; c.strokeStyle = BD.line; c.stroke() }
-// ---- head (centre 0,0, ~150 tall) ----
-export function bdHead(o = {}) {
-  const c = ctx(), e = o.expr || 'focused', look = o.look || 0;
-  c.save(); if (o.tilt) c.rotate(o.tilt);
-  P(c, [[0, -78], [52, -74, 58, -20], [62, 30, 40, 62], [20, 82, 0, 84], [-20, 82, -40, 62], [-62, 30, -58, -20], [-52, -74, 0, -78]], BD.skin);
-  c.save(); c.beginPath(); c.ellipse(0, 0, 60, 84, 0, 0, 7); c.clip(); c.fillStyle = BD.shade; c.beginPath(); c.ellipse(46, 18, 26, 70, -.1, 0, 7); c.fill(); c.fillStyle = BD.hi; c.beginPath(); c.ellipse(-24, -48, 14, 9, -.4, 0, 7); c.fill(); c.restore();
-  L(c, [[0, -78], [52, -74, 58, -20], [62, 30, 40, 62], [20, 82, 0, 84], [-20, 82, -40, 62], [-62, 30, -58, -20], [-52, -74, 0, -78]], LW);
-  // centre-face ridge (subtle, like a mask seam) from brow to chin
-  L(c, [[2, -6], [4, 30], [2, 58]], 2.5);
-  // eyes: white almond slits, the top edge is the brow
-  const eyes = { focused: [.7, -.4], angry: [.6, -.75], calm: [.5, -.15], tired: [.3, -.1], shocked: [1.3, 0], smug: [.5, -.45] }[e] || [.55, -.35];
-  for (const q of [-1, 1]) {
-    const x = q * 26, y = -12, w = 25, h = 20 * eyes[0], sl = -eyes[1] * 10;   // sl>0: inner corner lower (stern)
-    const inn = [x - q * w, y + sl], out = [x + q * w, y - sl * .4];
-    c.beginPath(); c.moveTo(inn[0], inn[1]); c.quadraticCurveTo(x, y - h - 4, out[0], out[1]); c.quadraticCurveTo(x, y + h, inn[0], inn[1]); c.closePath();
-    c.fillStyle = '#FFFFFF'; c.fill(); c.lineWidth = 3.5; c.strokeStyle = BD.line; c.stroke();
-    L(c, [[inn[0], inn[1] - 4], [x, y - h - 10, out[0] + q * 4, out[1] - 6]], 5.5);
-    if (e === 'shocked') { c.fillStyle = BD.line; c.beginPath(); c.arc(x + look * 6, y + 1, 3.5, 0, 7); c.fill() }
+// BROWN DUDE v2: our own fitness / body-science character (style: Clean Fitness Line Art, see shorts-animation-styles).
+// The body is ONE continuous human silhouette (torso + legs) plus one continuous outline per arm, drawn with smooth
+// cubic curves and interior anatomy contour lines. No capsules, no joints, no "lego" pieces.
+// Identity (ours): warm brown skin, bald head, short black beard and moustache, white focused eyes with thick brows,
+// black shorts with a saffron waistband, black wrist wraps, barefoot.
+import { ctx } from './toon.js';
+export const BD = { skin: '#A8693F', shade: '#8E5733', hi: '#BF8256', line: '#1A1411', shorts: '#232428', shortsShade: '#17181B', band: '#F08A24', wrap: '#1C1C20', beard: '#1E1612' };
+const LW = 4.2;
+function trace(c, ops) {
+  for (const o of ops) {
+    if (o[0] === 'M') c.moveTo(o[1], o[2]);
+    else if (o[0] === 'L') c.lineTo(o[1], o[2]);
+    else if (o[0] === 'Q') c.quadraticCurveTo(o[1], o[2], o[3], o[4]);
+    else c.bezierCurveTo(o[1], o[2], o[3], o[4], o[5], o[6]);
   }
-  // mouth: none at rest; a small shape when talking (o.talk 0..1) or an expression
-  if (o.talk > .1) { c.beginPath(); c.ellipse(2, 52, 10, 4 + o.talk * 8, 0, 0, 7); c.fillStyle = '#3a1a14'; c.fill(); c.lineWidth = 3; c.strokeStyle = BD.line; c.stroke() }
-  else if (e === 'smug') L(c, [[-8, 54], [4, 58, 14, 50]], 3);
-  else if (e === 'tired' || e === 'shocked') L(c, [[-8, 54], [8, 54]], 3);
-  if (o.sweat) { c.fillStyle = '#BFE6F7'; c.beginPath(); c.moveTo(56, -40); c.quadraticCurveTo(66, -22, 58, -16); c.quadraticCurveTo(48, -22, 56, -40); c.fill(); c.lineWidth = 2.5; c.stroke() }
+}
+// reverse an open path that starts with M (keeps the same curve, runs the other way)
+function reverseOps(ops) {
+  let cur = null; const segs = [];
+  for (const o of ops) { if (o[0] === 'M') { cur = [o[1], o[2]]; continue } const end = o[0] === 'C' ? [o[5], o[6]] : o[0] === 'Q' ? [o[3], o[4]] : [o[1], o[2]]; segs.push({ o, from: cur }); cur = end }
+  const out = [['M', cur[0], cur[1]]];
+  for (let i = segs.length - 1; i >= 0; i--) { const { o, from } = segs[i]; if (o[0] === 'C') out.push(['C', o[3], o[4], o[1], o[2], from[0], from[1]]); else if (o[0] === 'Q') out.push(['Q', o[1], o[2], from[0], from[1]]); else out.push(['L', from[0], from[1]]) }
+  return out;
+}
+const mirror = ops => ops.map(o => o[0] === 'C' ? ['C', -o[1], o[2], -o[3], o[4], -o[5], o[6]] : o[0] === 'Q' ? ['Q', -o[1], o[2], -o[3], o[4]] : [o[0], -o[1], o[2]]);
+const join = (right) => { const l = reverseOps(mirror(right)); return [...right, ['L', l[0][1], l[0][2]], ...l.slice(1)] };
+function shapeOps(c, ops, fill, lw = LW, shade) {
+  c.beginPath(); trace(c, ops); c.closePath(); if (fill) { c.fillStyle = fill; c.fill() }
+  if (shade) { c.save(); c.beginPath(); trace(c, ops); c.closePath(); c.clip(); shade(); c.restore() }
+  if (lw) { c.beginPath(); trace(c, ops); c.closePath(); c.lineWidth = lw; c.strokeStyle = BD.line; c.lineJoin = 'round'; c.lineCap = 'round'; c.stroke() }
+}
+function stroke(c, ops, lw = 2.6, col = BD.line) { c.beginPath(); trace(c, ops); c.lineWidth = lw; c.strokeStyle = col; c.lineCap = 'round'; c.lineJoin = 'round'; c.stroke() }
+const both = (c, ops, lw) => { stroke(c, ops, lw); stroke(c, mirror(ops), lw) };
+// ---------- TORSO + LEGS silhouette, right half from the neck down to the crotch; feet on y=0 ----------
+const RIGHT_BODY = [
+  ['M', 0, -876], ['L', 36, -876],
+  ['C', 37, -852, 42, -836, 62, -826],
+  ['C', 104, -812, 146, -804, 176, -790],
+  ['C', 182, -760, 172, -722, 156, -694],
+  ['C', 148, -650, 128, -600, 112, -566],
+  ['C', 104, -544, 108, -508, 122, -474],
+  ['C', 140, -430, 146, -356, 126, -286],
+  ['C', 120, -262, 122, -246, 116, -228],
+  ['C', 132, -186, 118, -98, 86, -54],
+  ['C', 86, -40, 92, -30, 104, -22],
+  ['C', 120, -14, 124, -2, 110, 0],
+  ['L', 42, 0], ['C', 32, -6, 36, -26, 44, -46],
+  ['C', 38, -104, 28, -176, 36, -236],
+  ['C', 34, -258, 30, -276, 28, -296],
+  ['C', 22, -352, 14, -420, 4, -458],
+  ['L', 0, -462]];
+const BODY = join(RIGHT_BODY);
+const RIGHT_SHORTS = [['M', 0, -540], ['L', 114, -540], ['C', 118, -510, 128, -486, 136, -460], ['C', 150, -420, 152, -380, 146, -336], ['C', 116, -320, 76, -318, 40, -326], ['C', 32, -360, 18, -404, 6, -446], ['L', 0, -450]];
+const SHORTS = join(RIGHT_SHORTS);
+// ---------- arms (right side, mirrored for the left), each one closed continuous outline ----------
+const ARMS = {
+  down: [['M', 152, -808], ['C', 204, -812, 226, -764, 218, -704],
+    ['C', 216, -666, 224, -626, 218, -586],
+    ['C', 232, -542, 236, -476, 226, -424],
+    ['C', 234, -400, 240, -358, 228, -330], ['C', 218, -312, 194, -314, 190, -336],
+    ['C', 184, -364, 186, -398, 192, -420],
+    ['C', 180, -476, 172, -534, 178, -574],
+    ['C', 178, -624, 162, -680, 150, -720],
+    ['C', 144, -760, 138, -792, 152, -808]],
+  up: [['M', 118, -770], ['C', 150, -800, 186, -790, 204, -820], ['C', 220, -850, 222, -880, 220, -910],
+    ['C', 222, -950, 226, -990, 218, -1030],
+    ['C', 222, -1080, 214, -1130, 204, -1168],
+    ['C', 212, -1196, 210, -1236, 196, -1250], ['C', 182, -1262, 160, -1254, 160, -1234],
+    ['C', 162, -1210, 170, -1190, 172, -1170],
+    ['C', 168, -1124, 168, -1076, 172, -1034],
+    ['C', 168, -970, 158, -910, 140, -860],
+    ['C', 130, -830, 120, -800, 118, -770]]
+};
+function arm(c, kind, m) {
+  const ops = m > 0 ? ARMS[kind] : mirror(ARMS[kind]);
+  shapeOps(c, ops, BD.skin, LW, () => { c.fillStyle = BD.shade; c.beginPath(); if (kind === 'down') c.ellipse(m * 222, -560, 16, 260, 0, 0, 7); else c.ellipse(m * 214, -1000, 14, 240, 0, 0, 7); c.fill() });
+  if (kind === 'down') {
+    stroke(c, [['M', m * 198, -746], ['C', m * 186, -724, m * 182, -702, m * 188, -680]], 2.6);
+    stroke(c, [['M', m * 170, -690], ['C', m * 182, -652, m * 186, -620, m * 182, -594]], 2.4);
+    stroke(c, [['M', m * 202, -562], ['C', m * 208, -540, m * 206, -516, m * 200, -500]], 2.2);
+    stroke(c, [['M', m * 200, -320], ['L', m * 202, -342]], 2); stroke(c, [['M', m * 212, -318], ['L', m * 214, -340]], 2);
+    shapeOps(c, [['M', m * 188, -448], ['C', m * 204, -454, m * 222, -454, m * 233, -446], ['L', m * 233, -404], ['C', m * 220, -398, m * 202, -398, m * 187, -404]], BD.wrap, 3);
+  } else {
+    stroke(c, [['M', m * 198, -880], ['C', m * 184, -898, m * 176, -918, m * 178, -940]], 2.6);
+    stroke(c, [['M', m * 158, -900], ['C', m * 174, -940, m * 182, -980, m * 184, -1010]], 2.4);
+    shapeOps(c, [['M', m * 168, -1152], ['C', m * 182, -1158, m * 200, -1158, m * 210, -1152], ['L', m * 208, -1112], ['C', m * 196, -1106, m * 180, -1106, m * 168, -1112]], BD.wrap, 3);
+  }
+}
+// ---------- head (centre 0,0) ----------
+export function bdHead(o = {}) {
+  const c = ctx(), e = o.expr || 'focused';
+  c.save(); if (o.tilt) c.rotate(o.tilt);
+  for (const m of [-1, 1]) shapeOps(c, [['M', m * 58, -16], ['C', m * 76, -26, m * 82, 4, m * 74, 20], ['C', m * 70, 32, m * 62, 32, m * 58, 26]], BD.skin, 3.5);
+  const HEAD = [['M', 0, -80], ['C', 40, -80, 62, -54, 62, -10], ['C', 62, 26, 54, 52, 38, 68], ['C', 26, 80, 12, 86, 0, 86], ['C', -12, 86, -26, 80, -38, 68], ['C', -54, 52, -62, 26, -62, -10], ['C', -62, -54, -40, -80, 0, -80]];
+  shapeOps(c, HEAD, BD.skin, LW, () => { c.fillStyle = BD.shade; c.beginPath(); c.ellipse(54, 10, 16, 80, -.08, 0, 7); c.fill(); c.fillStyle = BD.hi; c.beginPath(); c.ellipse(-22, -54, 16, 9, -.4, 0, 7); c.fill() });
+  shapeOps(c, [['M', -60, 12], ['C', -56, 50, -30, 86, 0, 90], ['C', 30, 86, 56, 50, 60, 12], ['C', 52, 30, 42, 44, 28, 50], ['C', 16, 46, -16, 46, -28, 50], ['C', -42, 44, -52, 30, -60, 12]], BD.beard, 3);
+  shapeOps(c, [['M', -26, 44], ['C', -12, 34, 12, 34, 26, 44], ['C', 12, 41, -12, 41, -26, 44]], BD.beard, 2.5);
+  const cfg = { focused: [.75, .35, 0], angry: [.65, .8, 0], calm: [.6, .1, .2], tired: [.5, .05, .5], shocked: [1.25, -.5, 0], smug: [.6, .3, .35] }[e] || [.75, .35, 0];
+  const look = o.look || 0;
+  for (const m of [-1, 1]) {
+    const x = m * 25, y = -12, w = 16, h = 12 * cfg[0];
+    c.beginPath(); c.ellipse(x, y, w, h, 0, 0, 7); c.fillStyle = '#FFFFFF'; c.fill(); c.lineWidth = 3; c.strokeStyle = BD.line; c.stroke();
+    c.save(); c.beginPath(); c.ellipse(x, y, w, h, 0, 0, 7); c.clip(); c.fillStyle = '#1b120d'; c.beginPath(); c.arc(x + look * 6, y + 1, 6, 0, 7); c.fill(); c.fillStyle = '#fff'; c.beginPath(); c.arc(x + look * 6 - 2, y - 2, 1.8, 0, 7); c.fill();
+    if (cfg[2] > 0) { c.fillStyle = BD.skin; c.fillRect(x - w - 2, y - h - 2, 2 * w + 4, (2 * h + 4) * cfg[2]) } c.restore();
+    if (cfg[2] > 0) stroke(c, [['M', x - w, y - h + 2 * h * cfg[2]], ['L', x + w, y - h + 2 * h * cfg[2]]], 3);
+    // thick brow: inner end drops with cfg[1]
+    const iy = y - h - 8 + cfg[1] * 10, oy = y - h - 10 - cfg[1] * 3;
+    shapeOps(c, [['M', x - m * 20, iy], ['C', x - m * 6, y - h - 18, x + m * 8, y - h - 18, x + m * 22, oy], ['L', x + m * 21, oy + 7], ['C', x + m * 8, y - h - 10, x - m * 6, y - h - 10, x - m * 20, iy + 7]], BD.beard, 1.5);
+  }
+  stroke(c, [['M', 4, 0], ['C', 12, 14, 12, 24, 2, 28]], 3);
+  if (o.talk > .1) shapeOps(c, [['M', -12, 56], ['C', -6, 54, 6, 54, 12, 56], ['C', 8, 62 + o.talk * 12, -8, 62 + o.talk * 12, -12, 56]], '#4a1b14', 2.5);
+  else if (e === 'smug') shapeOps(c, [['M', -12, 57], ['C', 0, 60, 8, 58, 14, 51], ['C', 8, 62, -2, 63, -12, 57]], '#7A3B2A', 1.5);
+  else if (e === 'shocked') shapeOps(c, [['M', -8, 56], ['C', -8, 70, 8, 70, 8, 56], ['C', 4, 52, -4, 52, -8, 56]], '#4a1b14', 2.5);
+  else shapeOps(c, [['M', -12, 56], ['C', -4, 53, 4, 53, 12, 56], ['C', 4, 60, -4, 60, -12, 56]], '#7A3B2A', 1.5);
+  if (o.sweat) shapeOps(c, [['M', 64, -44], ['C', 74, -26, 68, -16, 62, -18], ['C', 54, -22, 56, -32, 64, -44]], '#BFE6F7', 2.5);
   c.restore();
 }
-// limb segment: organic muscle capsule from a to b, widths wa->wb, bulge adds a belly (bicep/calf) toward side bs (+1/-1)
-function seg(c, a, b, wa, wb, fill, bulge = 0, bs = 1) {
-  const dx = b[0] - a[0], dy = b[1] - a[1], d = Math.hypot(dx, dy) || 1, ux = dx / d, uy = dy / d, nx = -uy, ny = ux, L = [], R = [];
-  for (let i = 0; i <= 8; i++) { const t = i / 8, w = wa + (wb - wa) * t, bl = bulge * Math.sin(Math.PI * Math.min(1, t * 1.25)); const x = a[0] + dx * t, y = a[1] + dy * t; L.push([x + nx * (w + (bs > 0 ? bl : bl * .35)), y + ny * (w + (bs > 0 ? bl : bl * .35))]); R.push([x - nx * (w + (bs < 0 ? bl : bl * .35)), y - ny * (w + (bs < 0 ? bl : bl * .35))]) }
-  const capA = [a[0] - ux * wa * .8, a[1] - uy * wa * .8], capB = [b[0] + ux * wb * .8, b[1] + uy * wb * .8];
-  const pts = [capA, ...L, capB, ...R.reverse()];
-  c.beginPath(); smooth(pts); c.fillStyle = fill; c.fill(); c.lineWidth = LW; c.strokeStyle = BD.line; c.lineJoin = 'round'; c.stroke();
+function anatomy(c) {
+  both(c, [['M', 30, -818], ['C', 70, -810, 112, -806, 150, -796]], 2.2);
+  stroke(c, [['M', 0, -800], ['L', 0, -690]], 2.4);
+  both(c, [['M', 6, -688], ['C', 50, -668, 110, -676, 150, -716]], 3.2);
+  both(c, [['M', 150, -762], ['C', 130, -742, 120, -722, 124, -702]], 2.2);
+  stroke(c, [['M', 0, -680], ['L', 0, -540]], 2.4);
+  for (const y of [-640, -598, -558]) both(c, [['M', 6, y], ['C', 26, y - 8, 46, y - 6, 58, y + 2]], 2.4);
+  both(c, [['M', 62, -684], ['C', 72, -630, 70, -580, 58, -546]], 2.4);
+  for (const y of [-652, -620, -588]) both(c, [['M', 114, y], ['L', 98, y + 12]], 2);
+  both(c, [['M', 92, -300], ['C', 72, -292, 62, -270, 66, -250]], 2.4);
+  both(c, [['M', 118, -322], ['C', 108, -302, 104, -282, 106, -264]], 2);
+  both(c, [['M', 60, -246], ['C', 70, -238, 90, -238, 100, -246]], 2);
+  both(c, [['M', 112, -196], ['C', 104, -160, 100, -130, 96, -110]], 2.2);
+  both(c, [['M', 54, -180], ['C', 52, -150, 52, -120, 56, -96]], 2);
+  both(c, [['M', 64, -8], ['L', 66, 0]], 2); both(c, [['M', 80, -10], ['L', 82, 0]], 2); both(c, [['M', 94, -12], ['L', 96, 0]], 2);
 }
-function fist(c, x, y, s = 1, wrap = true) { if (wrap) P(c, [[x - 24 * s, y - 34 * s], [x + 24 * s, y - 34 * s], [x + 26 * s, y - 10 * s], [x - 26 * s, y - 10 * s]], BD.wrap, 3.5); P(c, [[x - 24 * s, y - 12 * s], [x + 24 * s, y - 12 * s], [x + 28 * s, y + 10 * s, x + 18 * s, y + 26 * s], [x - 18 * s, y + 26 * s], [x - 28 * s, y + 10 * s, x - 24 * s, y - 12 * s]], BD.skin, 3.5); for (let i = 0; i < 3; i++) L(c, [[x - 12 * s + i * 12 * s, y + 4 * s], [x - 12 * s + i * 12 * s, y + 20 * s]], 2) }
-// ---- full body, front view ----
-// o: x,y,s,pose:'stand'|'armsCrossed'|'hang'|'point'|'flex', expr, talk, look, tilt, sweat
+// o: x, y, s, pose: 'stand' | 'hang' (more poses to be added as continuous outlines), expr, talk, look, tilt, sweat
 export function brownDude(o) {
   const c = ctx(), s = o.s || 1, pose = o.pose || 'stand';
   c.save(); c.translate(o.x, o.y); c.scale(s, s);
-  if (!o.noShadow && pose !== 'hang') { c.save(); c.globalAlpha = .16; c.fillStyle = '#20202a'; c.beginPath(); c.ellipse(0, 6, 150, 18, 0, 0, 7); c.fill(); c.restore() }
-  const hipY = -470, shY = -790, sw = 150;
-  // legs
-  for (const q of [-1, 1]) {
-    const hip = [q * 50, hipY + 40], knee = [q * 62, -250], ank = [q * 58, -36];
-    seg(c, knee, ank, 34, 20, BD.skin, 14, q); seg(c, hip, knee, 50, 34, BD.skin, 14, -q);
-    L(c, [[q * 40, -330], [q * 70, -300, q * 64, -262]], 2.5); L(c, [[q * 74, -200], [q * 88, -140, q * 70, -90]], 2.5); L(c, [[q * 46, -190], [q * 40, -140, q * 50, -90]], 2);
-    P(c, [[q * 40, -36], [q * 80, -36], [q * 98, -6, q * 92, 2], [q * 30, 2], [q * 26, -16, q * 40, -36]], BD.skin, 3.5);
-    for (let i = 0; i < 3; i++) L(c, [[q * (60 + i * 10), -6], [q * (62 + i * 10), 2]], 2);
-  }
-  // shorts
-  P(c, [[-sw + 22, hipY - 20], [sw - 22, hipY - 20], [sw + 4, hipY + 170], [24, hipY + 186], [0, hipY + 110], [-24, hipY + 186], [-sw - 4, hipY + 170]], BD.shorts);
-  P(c, [[-sw + 22, hipY - 20], [sw - 22, hipY - 20], [sw - 16, hipY + 12], [-sw + 16, hipY + 12]], BD.band, 4);
-  L(c, [[-90, hipY + 40], [-70, hipY + 120]], 2.5); L(c, [[96, hipY + 50], [80, hipY + 140]], 2.5); c.save(); c.globalAlpha = .5; L(c, [[-120, hipY + 30], [-130, hipY + 150]], 6); c.restore();
-  // torso (V-taper) with muscle lines
-  const T = [[-sw - 20, shY + 40], [-60, shY - 6], [60, shY - 6], [sw + 20, shY + 40], [sw + 10, shY + 140, sw - 10, shY + 190], [sw - 26, hipY - 40, sw - 22, hipY - 18], [-sw + 22, hipY - 18], [-sw + 26, hipY - 40, -sw + 10, shY + 190], [-sw - 10, shY + 140, -sw - 20, shY + 40]];
-  P(c, T, BD.skin);
-  c.save(); P(c, T, null, 0); c.clip(); c.fillStyle = BD.shade; c.fillRect(sw - 50, shY - 20, 90, 400); c.restore();
-  L(c, [[-118, shY + 70], [-60, shY + 150, 0, shY + 140]], 3.5); L(c, [[118, shY + 70], [60, shY + 150, 0, shY + 140]], 3.5); L(c, [[0, shY + 30], [0, shY + 140]], 2.5);
-  for (const q of [-1, 1]) { for (let i = 0; i < 3; i++) L(c, [[q * 8, shY + 180 + i * 62], [q * 40, shY + 172 + i * 62, q * 50, shY + 186 + i * 62]], 2.5); L(c, [[q * 58, shY + 165], [q * 70, shY + 260, q * 52, hipY - 30]], 2.5); L(c, [[q * 96, shY + 190], [q * 84, shY + 230]], 2); L(c, [[q * 92, shY + 240], [q * 80, shY + 280]], 2) }
-  L(c, [[0, shY + 160], [0, hipY - 24]], 2.5);
-  // neck + traps
-  P(c, [[-52, shY + 6], [-34, shY - 74], [34, shY - 74], [52, shY + 6]], BD.skin, 4); L(c, [[-20, shY - 30], [-8, shY - 4]], 2.5); L(c, [[-36, shY - 4], [-90, shY + 4, -sw - 10, shY + 36]], 3.5); L(c, [[36, shY - 4], [90, shY + 4, sw + 10, shY + 36]], 3.5);
-  // arms by pose
-  const sh = q => [q * (sw + 6), shY + 52];
-  const delt = (q, el) => { const S = sh(q), a = Math.atan2(el[1] - S[1], el[0] - S[0]); c.save(); c.translate(S[0] + Math.cos(a) * 18, S[1] + Math.sin(a) * 18); c.rotate(a); c.beginPath(); c.ellipse(0, 0, 62, 50, 0, 0, 7); c.fillStyle = BD.skin; c.fill(); c.lineWidth = LW; c.strokeStyle = BD.line; c.stroke(); L(c, [[-10, -30], [24, 0, -6, 34]], 2.5); c.restore() };
-  const armDraw = (q, el, hd, fistOn = true) => { const S = sh(q); seg(c, el, hd, 30, 20, BD.skin, 10, q); seg(c, S, el, 40, 28, BD.skin, 16, q); delt(q, el); L(c, [[(S[0] + el[0]) / 2 - 10, (S[1] + el[1]) / 2], [(S[0] + el[0]) / 2 + 12, (S[1] + el[1]) / 2 + 20]], 2.5); if (fistOn) fist(c, hd[0], hd[1] + 10) };
-  if (pose === 'armsCrossed') {
-    for (const q of [-1, 1]) { const S = sh(q); seg(c, S, [q * 172, shY + 270], 42, 32, BD.skin, 18, q); delt(q, [q * 172, shY + 270]) }
-    seg(c, [-170, shY + 270], [80, shY + 230], 32, 26, BD.skin, 10, -1); P(c, [[50, shY + 200], [100, shY + 205], [104, shY + 255], [54, shY + 262]], BD.wrap, 3.5);
-    seg(c, [170, shY + 280], [-70, shY + 250], 34, 26, BD.skin, 10, -1); P(c, [[-100, shY + 222], [-50, shY + 220], [-48, shY + 278], [-98, shY + 282]], BD.wrap, 3.5);
-    L(c, [[-60, shY + 230], [40, shY + 214]], 2.5); L(c, [[150, shY + 250], [60, shY + 262]], 2.5);
-  } else if (pose === 'hang') {
-    armDraw(-1, [-sw - 30, shY - 120], [-sw - 20, shY - 260]); armDraw(1, [sw + 30, shY - 120], [sw + 20, shY - 260]);
-  } else if (pose === 'point') {
-    armDraw(-1, [-sw - 46, shY + 200], [-sw - 40, shY + 390]);
-    const S = sh(1), el = [sw + 90, shY + 170], hd = [sw + 60, shY - 10];
-    seg(c, el, hd, 30, 22, BD.skin, 10, 1); seg(c, S, el, 40, 30, BD.skin, 16, 1); delt(1, el);
-    P(c, [[hd[0] - 30, hd[1] + 10], [hd[0] + 30, hd[1] + 10], [hd[0] + 30, hd[1] + 40], [hd[0] - 30, hd[1] + 40]], BD.wrap, 3.5);
-    P(c, [[hd[0] - 28, hd[1] + 12], [hd[0] - 30, hd[1] - 40, hd[0] - 6, hd[1] - 46], [hd[0] + 26, hd[1] - 44], [hd[0] + 34, hd[1] - 10, hd[0] + 28, hd[1] + 12]], BD.skin, 3.5);
-    for (let i = 0; i < 3; i++) L(c, [[hd[0] - 2, hd[1] - 32 + i * 14], [hd[0] + 28, hd[1] - 30 + i * 14]], 2.5);
-    P(c, [[hd[0] - 26, hd[1] - 40], [hd[0] - 28, hd[1] - 110, hd[0] - 16, hd[1] - 116], [hd[0] - 4, hd[1] - 110, hd[0] - 6, hd[1] - 40]], BD.skin, 3.5);
-    P(c, [[hd[0] - 30, hd[1] - 10], [hd[0] - 52, hd[1] - 22, hd[0] - 44, hd[1] - 36], [hd[0] - 24, hd[1] - 30]], BD.skin, 3);
-  } else if (pose === 'flex') {
-    for (const q of [-1, 1]) { const S = sh(q), el = [q * (sw + 160), shY + 50]; seg(c, el, [q * (sw + 150), shY - 130], 32, 24, BD.skin, 12, -q); seg(c, S, el, 42, 32, BD.skin, 30, -1); delt(q, el); fist(c, q * (sw + 150), shY - 160) }
-  } else { armDraw(-1, [-sw - 46, shY + 200], [-sw - 40, shY + 390]); armDraw(1, [sw + 46, shY + 200], [sw + 40, shY + 390]) }
-  // head
-  c.save(); c.translate(0, shY - 160); c.scale(1.15, 1.15); bdHead(o); c.restore();
+  if (!o.noShadow && pose !== 'hang') { c.save(); c.globalAlpha = .15; c.fillStyle = '#1e1a22'; c.beginPath(); c.ellipse(0, 6, 170, 18, 0, 0, 7); c.fill(); c.restore() }
+  shapeOps(c, BODY, BD.skin, LW, () => { c.fillStyle = BD.shade; c.beginPath(); trace(c, [['M', 132, -800], ['C', 200, -780, 166, -620, 124, -560], ['C', 150, -480, 162, -360, 132, -280], ['C', 146, -200, 132, -100, 102, -40], ['L', 300, 0], ['L', 300, -900]]); c.closePath(); c.fill(); c.fillStyle = BD.hi; c.beginPath(); c.ellipse(-72, -742, 40, 16, -.3, 0, 7); c.fill() });
+  anatomy(c);
+  shapeOps(c, SHORTS, BD.shorts, LW, () => { c.fillStyle = BD.shortsShade; c.beginPath(); trace(c, [['M', 104, -540], ['C', 140, -480, 150, -400, 146, -330], ['L', 300, -330], ['L', 300, -540]]); c.closePath(); c.fill() });
+  shapeOps(c, [['M', -114, -540], ['L', 114, -540], ['L', 118, -514], ['L', -118, -514]], BD.band, 3.2);
+  both(c, [['M', 30, -506], ['C', 22, -470, 14, -452, 6, -446]], 2.4);
+  both(c, [['M', 118, -470], ['C', 128, -420, 130, -380, 124, -342]], 2.2);
+  if (pose === 'hang') { arm(c, 'up', 1); arm(c, 'up', -1) }
+  else { arm(c, 'down', 1); arm(c, 'down', -1) }
+  stroke(c, [['M', -22, -868], ['C', -18, -852, -12, -842, 0, -836]], 2.2);
+  c.save(); c.translate(0, -948); bdHead(o); c.restore();
   c.restore();
 }
-// flat pastel background with a soft floor shadow line (the channel-style plate)
 export function plate(col = '#D7E4EE') { const c = ctx(); c.fillStyle = col; c.fillRect(-2000, -2000, 6000, 6000) }
 export const PLATES = { blue: '#D7E4EE', cream: '#FCEFD9', lilac: '#D9D0EE', mint: '#D6EEDF', peach: '#F8DCCB' };
