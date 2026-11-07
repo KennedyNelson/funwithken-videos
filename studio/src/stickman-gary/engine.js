@@ -54,18 +54,21 @@ export function face(o){
   if(hair==='strand'){const w=o.strandWave||0;line([[r*.05,-r*1.04],[r*.14,-r*1.36],[r*.38+w*r*.3,-r*1.42+Math.abs(w)*r*.1],[r*.6+w*r*.5,-r*1.2]],lw*.8,INK,1.2)}
   if(hair==='quiff'){const f=o.hairFill||'#E8772E';shape([[-r*.92,-r*.3],[-r*.9,-r*.86],[-r*.3,-r*1.2],[r*.5,-r*1.5],[r*1.3,-r*1.34],[r*.9,-r*.95],[r*.98,-r*.42],[r*.4,-r*.74],[-r*.3,-r*.68]],f,lw,INK,2)}
   if(hair==='afro'){const f=o.hairFill||'#3a2a22';for(let i=0;i<12;i++){const a=3.3+i/11*2.85;oval(Math.cos(a)*r*.92,Math.sin(a)*r*1.05,r*.34,r*.32,f,lw*.7,INK,1.6)}}
+  if(hair==='part'){const f=o.hairFill||'#2A1D16';shape([[-r*.86,-r*.25],[-r*.95,-r*.8],[-r*.55,-r*1.12],[r*.1,-r*1.2],[r*.7,-r*1.08],[r*.98,-r*.7],[r*.9,-r*.3],[r*.6,-r*.72],[-r*.05,-r*.8],[-r*.4,-r*.62]],f,lw,INK,1.6);line([[-r*.38,-r*1.12],[-r*.3,-r*.72]],lw*.5,'#5a463a',.6)}
   const s=o.eye||1, b=r*.34*s, ey=-r*.2, ex2=r*.33*s*.98, lk=o.look||[0,0];
   if(o.eyes==='dots'){dot(-r*.3,ey,r*.075);dot(r*.3,ey,r*.075)}
   else if(o.eyes==='closed'){for(const q of[-1,1]){const X=q*r*.33;line([[X-r*.16,ey-r*.02],[X,ey+r*.06],[X+r*.16,ey-r*.02]],lw*.9,INK,.6)}}
   else if(o.eyes==='x'){for(const q of[-1,1]){const X=q*r*.32;line([[X-r*.12,ey-r*.12],[X+r*.12,ey+r*.12]],lw,INK,.6);line([[X+r*.12,ey-r*.12],[X-r*.12,ey+r*.12]],lw,INK,.6)}}
   else{for(const q of[-1,1]){const X=q*ex2,R=b;oval(X,ey,R,R*1.12,'#FFFFFF',lw,INK,1.4);if(o.veins)veins(X,ey,R);const pr=R*(o.pupil||.34);dot(X+lk[0]*R*.45,ey+lk[1]*R*.45,pr)}}
+  if(o.specs){const R=b*1.12,fr=o.specCol||'#141414';for(const q of[-1,1]){const X=q*ex2;c.save();c.beginPath();c.roundRect(X-R,ey-R*.92,R*2,R*1.84,R*.45);c.lineWidth=lw*1.25;c.strokeStyle=fr;c.stroke();c.fillStyle='rgba(180,220,255,.18)';c.fill();c.restore()}line([[-ex2+R,ey-R*.2],[ex2-R,ey-R*.2]],lw*1.1,fr,.4);line([[-ex2-R,ey-R*.3],[-r*.84,ey-R*.1]],lw,fr,.4);line([[ex2+R,ey-R*.3],[r*.84,ey-R*.1]],lw,fr,.4)}
   // nose bump
   if(o.nose!==false)oval(r*.03,r*.16+ (s-1)*r*.2,r*.13,r*.1,sk,lw*.85,INK,1.1);
   // brows
   if(o.brow!==undefined){const q=o.brow;for(const m of[-1,1]){const X=m*r*.38;line([[X-r*.2,ey-b*1.3+m*q*r*.1],[X+r*.2,ey-b*1.3-m*q*r*.1]],lw,INK,.8)}}
   // mouth
   const my=r*.58, m=o.mouth||'flat', op=o.open==null?1:o.open;
-  if(m==='flat')line([[-r*.2,my],[r*.2,my]],lw,INK,1);
+  if(m==='frown')line([[-r*.28,my+r*.06],[-r*.1,my-r*.03],[r*.1,my-r*.03],[r*.28,my+r*.06]],lw,INK,.8);
+  else if(m==='flat')line([[-r*.2,my],[r*.2,my]],lw,INK,1);
   else if(m==='smile')line([[-r*.34,my-r*.08],[-r*.14,my+r*.06],[r*.14,my+r*.06],[r*.34,my-r*.08]],lw,INK,.8);
   else if(m==='wobble')line([[-r*.32,my],[-r*.16,my-r*.06],[0,my+r*.05],[r*.16,my-r*.06],[r*.32,my]],lw,INK,.8);
   else if(m==='grin'){shape([[-r*.42,my-r*.14],[r*.42,my-r*.14],[r*.26,my+r*.2],[-r*.26,my+r*.2]],'#FFFFFF',lw,INK,1);line([[-r*.38,my-r*.02],[r*.38,my-r*.02]],lw*.5,INK,.5)}
