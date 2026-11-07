@@ -1,8 +1,8 @@
 [
- ["k", 0.3, 10.6, "Jis samaaj mein gaaliyan nahi di jaati, woh samaaj hi nahi hai. Toh kaun si aisi gaali hai jismein bada maza aata hai aapko, matlab dene mein gaali?"],
- ["f", 11.9, 12.7, "M*darch*d."],
- ["k", 14.2, 16.4, "Matlab Vijay bhai, poori kavita hai..."],
- ["f", 16.5, 31.2, "Kavita hai, agar aap sunein ki... M*darch*d. Ab dekh rahe hain na, poora lay hai, lay hai usmein. Kya hai na, aur maatraayein dekhiye aap, maatraayein dekhiye... Maa... da... Woh emotion bhi dekho, jo banda feel kar raha hai, woh bahar aa raha hai."],
- ["f", 32.8, 38.3, "Achha Pandit ji, ek cheez batao, ki aapki pasandida gaali kaun si hai?"],
- ["k", 38.4, 40.85, "Pasandida gaali hamari hai... Bh*sdi ke."]
+ ["k", 0.0, 4.0, "Jis samaaj mein gaaliyan nahi di jaati, woh samaaj hi nahi hai."],
+ ["f", 4.0, 8.0, "Toh kaun si aisi gaali hai jismein bada maza aata hai aapko, matlab dene mein gaali?"],
+ ["k", 8.0, 12.0, "M*darch*d."],
+ ["f", 12.0, 27.0, "Matlab Manoj bhai, poori kavita hai... Kavita hai, agar aap sunein ki... M*darch*d. Ab dekh rahe hain na, poora lay hai, lay hai usmein. Kya hai na, aur maatraayein dekhiye aap, maatraayein dekhiye... Maa... da..."],
+ ["k", 27.0, 32.0, "Woh emotion bhi dekho, jo banda feel kar raha hai, woh bahar aa raha hai."],
+ ["k", 32.0, 40.85, "Achha Pandit ji, ek cheez batao, ki aapki pasandida gaali kaun si hai? Pasandida gaali hamari hai... Bh*sdi ke."]
 ]
