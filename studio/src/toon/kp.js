@@ -100,7 +100,8 @@ function mouth(c, x, y, r, f, sk) {
 export function kpSeated(o) {
   const c = ctx(), s = o.s || 1, sk = o.skin, tc = o.topCol, td = dark(tc, .16), pc = o.pant, pd = dark(pc, .18);
   c.save(); c.translate(o.x, o.y); c.scale(s * (o.flip ? -1 : 1), s);
-  const lean = o.lean || 0, hop = o.hop || 0; c.translate(0, -hop);
+  const lean = o.lean || 0, hop = o.hop || 0, st = o.stand || 0, LIFT = 205; c.translate(0, -hop - st * LIFT);
+  const L2 = (a, b) => [lerp(a[0], b[0], st), lerp(a[1], b[1], st)];   // stand: legs straighten as the body rises off the seat
   const SH = { near: [-70, -300], far: [78, -312] };
   const armDraw = (k, a, col, scol) => {
     const S = SH[k], e = [S[0] + a.e[0], S[1] + a.e[1]], h = [S[0] + a.h[0], S[1] + a.h[1]];
@@ -113,7 +114,7 @@ export function kpSeated(o) {
     else tube(c, [[S[0], S[1] + 6], e, [lerp(e[0], h[0], .78), lerp(e[1], h[1], .78)]], [36, 30, 24], scol, { openStart: true, shade: () => {} });
   };
   // far leg, far arm (behind torso)
-  leg(c, [36, -6], [212, -24], [226, 232], pd, dark(o.shoe, .12), 1);
+  leg(c, [36, -6], L2([212, -24], [62, 215]), L2([226, 232], [70, 437]), pd, dark(o.shoe, .12), 1);
   c.save(); c.rotate(lean); armDraw('far', o.arms.far, sk, td); c.restore();
   // torso (one shape incl. hips and shoulders)
   c.save(); c.rotate(lean);
@@ -130,7 +131,7 @@ export function kpSeated(o) {
   c.save(); c.translate(6, -470); c.translate(0, (o.nod || 0) * 18); c.rotate(o.headTilt || 0); kpHead({ r: 128, ...o, turn: o.turn == null ? .55 : o.turn }); c.restore();
   c.restore();
   // near leg (front)
-  leg(c, [-40, 2], [196, -6], [204, 246], pc, o.shoe, -1);
+  leg(c, [-40, 2], L2([196, -6], [44, 218]), L2([204, 246], [54, 450]), pc, o.shoe, -1);
   // near arm (front)
   c.save(); c.rotate(lean); armDraw('near', o.arms.near, sk, tc); c.restore();
   c.restore();
