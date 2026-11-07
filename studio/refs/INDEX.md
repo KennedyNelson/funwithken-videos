@@ -8,6 +8,7 @@ Rule (owner, 2026-11-07): every reference video, screenshot and audio the owner 
 | `neon-pit/` | Two 3D low-poly Claude-and-engineer chat reels (49 s and 58 s, account agentpoly area) plus 4 stills: engineer with title card, the terracotta Claude slab, 'Yes!' reaction, 'production-old' line. Dark moody room with a glowing title, big close-ups, word captions, fast cuts between engineer, Claude and a terminal/chat-history insert | Neon Pit (we use BRIGHT daylight instead of the dark room) |
 | `viral-reels/` | The four viral Instagram reels the owner used to define the Viral Reel styles: 'Absence changed nothing' (4.9 s, Moody Mono), 'Mental health right now' (17 s, Pastel Call), 'Girl math: stay home to not spend money' (6.5 s, Storybook Room pull-back), 'Charger switch was off' (6.9 s, Big-Eyes Cutie) | Viral Reel styles |
 | `voice/` | Two 70 s audio attachments sent on 4 Nov (origin and content not confirmed; Claude cannot hear audio). Pitch measurements of the two Neon Pit reference reels are in the Project doc `claude/voice-direction-notes.md` | Voice direction |
+| `2d-song-reels/` | `animatorkay-adhuri-khwaish-friends-wish-10s-screenrec.mp4` (+ sheet): a screen recording (Instagram UI visible, ignore it) of a 10.8 s cinematic 2D reel, caption 'Adhuri khwaish', sung by a Hindi song. Two friends on red chairs in a purple dusk desert-cliff valley, full moon, blurred painted background; shooting star; giant cel-shaded close-ups with glossy eyes, praying hands, quivering mouth | Painted dusk street / Moody Mono / Big-Eyes Cutie feel, emotional song reel |
 
 Each video has a `-sheet.jpg` next to it: a quick contact sheet (a frame every ~1.5 s) so a style can be checked without playing the video.
 
@@ -16,6 +17,13 @@ Each video has a `-sheet.jpg` next to it: a quick contact sheet (a frame every ~
 - **Neon Pit refs:** one character fills the frame, slow push-in, shallow depth of field, a title/handle plate above the head, chat-history or terminal inserts as cutaways, short alternating lines (about 3 s each), clearly different engineer and Claude voices, wide pitch swings.
 - **Viral reels:** one setup line in the first frame; 5-17 s; 0-1 cuts; the payoff is a visual or an acted reaction; the end is abrupt. Our Instagram rules add a new shot every 1.5-3 s.
 - Still to add when the owner sends them: the Instagram 'saved reels' ten reference looks (section 13.1 of the Instagram skill) exist only as notes, because Instagram reels cannot be downloaded from the sandbox; if the owner sends screen recordings of them, file them under `viral-reels/saved-<name>/`.
+
+- **2d-song-reels (animatorkay):** ~7 shots in 10.8 s. Wide two-shot (one friend on phone, other lounging) > friend points up > star cutaway > HUGE close-up of the wishing face (praying hands, glossy eyes looking up) > back to wide > medium of the laughing friend > two closer sad close-ups at the end. Background is a soft-blurred painted plate with one moonlight colour (purple/blue), characters sharply cel-shaded with a darker shadow tone and big glossy eyes with white highlights, warm skin vs cool background. Camera slowly pushes in on close-ups; cuts land on the sung phrases.
+
+## Audio grammar measured from the references (Claude cannot hear: numbers only)
+- **animatorkay song reel (10.8 s):** a sung track, not dialogue. 0-1 s near-silent lead-in, then voiced singing most of the time (70-100% voiced, pitch glides 310 Hz down to 170 Hz over the first 5 s), a held note gap about 5-5.5 s, loudness builds from about -50 dB at 0.5 s to a peak (-4 dB) near 6.5-7 s, then holds at the high level until the cut; abrupt end. Lesson: emotional reels use ONE continuous emotional track whose loudness rises toward the final shots, and the picture cuts on the phrases.
+- **Dialogue reels (Neon Pit refs):** see `claude/voice-direction-notes.md` in the Project: alternating short lines, clearly different pitch per character, wide pitch swings.
+- For our own audio: rising bed, a near-silent first beat, cuts timed to phrase starts, loudest moment on the payoff, no fade-out. Whisper models cannot be downloaded in the sandbox, so lyrics/transcripts of references are not available unless the owner types them.
 
 ## Our own outputs are NOT references
 Finished reels and videos live under `studio/episodes/` and the repo root. Do not copy them here.
