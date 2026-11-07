@@ -13,3 +13,7 @@ Pace (2026-11-07 Mom 5 min): 21.5 s, 8 short lines, 16 shots (cut every 0.7-2.5 
 
 - 2026-11-07 | Instagram | "Personal space: girls vs boys" scooter reel (owner's final edit, 10.2 s, voice only, no BGM) | style: Stickman, green roadside | media 18105313730376428 | caption: "Peeche ho yaar! 😭" + #relatable #girlsvsboys #desihumor #indianreels #funnyreels | location not tagged (needs Facebook Page ID) | insights: read after 24-48 h
 - 2026-11-07 | Instagram | "Being kind in this economy" chai + samosa reel (owner's final edit with IG sound, 18.0 s) | style: Polished Desi Toon, first use (studio/src/toon/, ep-chai5.js; auto rickshaw on a blurred street, cel-lit tea stall, wallet macro insert, 5 s silent disappointment hold) | voices: Chris (Kalu), Callum (driver), Bill (chaiwala), eleven_v3, Devanagari | media 18081646019718794 | https://www.instagram.com/reel/DfcGRLJnN9A/ | caption: "Meri taraf se 🥲" + #relatable #desihumor #chai #indianreels #funnyreels | location not tagged (needs Facebook Page ID) | insights: read after 24-48 h
+
+## 2026-11-08 — "Avg conversation between boys" (Stickman, 39 s, silent)
+- media 18334855615262967, caption "Avg conversation between boys 🧐 #relatable #desihumor #indianreels #funnyreels #boys"
+- source: studio/episodes/2026-11-07-gaali-kavita (ep-gaali-stick.js); posted without audio, owner can't add sound after publishing
