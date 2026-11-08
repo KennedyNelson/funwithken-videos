@@ -37,7 +37,8 @@ export function kpHead(o) {
   // ear on the side away from the look
   const ex = -Math.sign(tn || .001) * r * .95; if (Math.abs(tn) > .1) { ell(c, ex, r * .05, r * .16, r * .22, sk); line(c, [[ex + Math.sign(tn) * r * .02, -r * .05], [ex - Math.sign(tn) * r * .05, r * .08, ex + Math.sign(tn) * r * .03, r * .14]], 3, sh) }
   // skull + cheeks + chin (slightly wider low, kp-like)
-  const H = [[0, -r], [r * .78, -r * .98, r, -r * .5, r * .98, -r * .05], [r * .96, r * .45, r * .66, r * .9, fx * .4, r * .94], [-r * .66, r * .9, -r * .96, r * .45, -r * .98, -r * .05], [-r, -r * .5, -r * .78, -r * .98, 0, -r]];
+  const SQ = o.head === 'square';   // slightly curved square skull (Kalu)
+  const H = SQ ? [[-r * .6, -r], [r * .6, -r], [r * .92, -r, r * 1.0, -r * .88, r * 1.0, -r * .55], [r * 1.0, r * .4], [r * 1.0, r * .8, r * .82, r * .95, r * .5 + fx * .4, r * .96], [-r * .5 + fx * .4, r * .96], [-r * .82, r * .95, -r * 1.0, r * .8, -r * 1.0, r * .4], [-r * 1.0, -r * .55], [-r * 1.0, -r * .88, -r * .92, -r, -r * .6, -r]] : [[0, -r], [r * .78, -r * .98, r, -r * .5, r * .98, -r * .05], [r * .96, r * .45, r * .66, r * .9, fx * .4, r * .94], [-r * .66, r * .9, -r * .96, r * .45, -r * .98, -r * .05], [-r, -r * .5, -r * .78, -r * .98, 0, -r]];
   shape(c, H, sk, LW, () => { c.fillStyle = sh; c.beginPath(); c.ellipse(-Math.sign(tn || 1) * r * .82, r * .25, r * .3, r * .9, 0, 0, 7); c.fill(); c.beginPath(); c.ellipse(fx * .4, r * .95, r * .55, r * .14, 0, 0, 7); c.fill();
     if (o.stubble) { c.globalAlpha = .13; c.fillStyle = '#1a120c'; c.beginPath(); c.ellipse(fx * .5, r * .62, r * .62, r * .3, 0, 0, 7); c.fill(); c.globalAlpha = 1 } });
   if (f.blush) { c.save(); c.globalAlpha = .25; c.fillStyle = '#E25E5E'; c.beginPath(); c.ellipse(fx - r * .52, r * .32, r * .17, r * .08, 0, 0, 7); c.ellipse(fx + r * .52, r * .32, r * .17, r * .08, 0, 0, 7); c.fill(); c.restore() }
@@ -99,7 +100,7 @@ function drawHat(c, r, o) {   // fedora with a plaid crown and brim
   c.save(); c.rotate(o.hatTilt == null ? -.05 : o.hatTilt);
   brim(); c.fillStyle = col; c.fill(); plaid(brim); brim(); c.lineWidth = LW; c.strokeStyle = INK; c.stroke();
   crown(); c.fillStyle = col; c.fill(); plaid(crown); crown(); c.lineWidth = LW; c.strokeStyle = INK; c.stroke();
-  c.save(); crown(); c.clip(); c.fillStyle = '#202024'; c.fillRect(-r * 1.1, by - r * .17, r * 2.2, r * .17); c.restore();
+  c.save(); crown(); c.clip(); c.fillStyle = o.hatBand || '#202024'; c.fillRect(-r * 1.1, by - r * .17, r * 2.2, r * .17); c.restore();
   const front = () => { c.beginPath(); c.ellipse(0, by, rx, ry, 0, 0, Math.PI) };
   front(); c.fillStyle = col; c.fill(); plaid(front); c.beginPath(); c.ellipse(0, by, rx, ry, 0, 0, Math.PI); c.lineWidth = LW; c.strokeStyle = INK; c.stroke();
   c.restore();

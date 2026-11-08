@@ -1,7 +1,7 @@
 // 2026-11-08 IG reel "I am Kala" (cafe scene), Desi Goggle-Eye Toon. Replicates the owner's clip beat for beat with OUR characters:
-//  Kalu (main) = brown, black suit + tie, plaid fedora, black sunglasses, grins and laughs; Battery = cream suit, clear specs, long centre-parted hair.
+//  Kalu (main) = brown, black suit + tie, plaid fedora, black sunglasses, deadpan, never laughs; Battery = cream suit, clear specs, long centre-parted hair.
 //  Shots follow the clip: wide two-shot (0-6.77), close-up Battery over Kalu's shoulder (6.77-11.33), close-up Kalu over Battery's shoulder (11.33-15.31).
-//  Actions: Battery stirs his coffee, sips it, then eyes Kalu; Kalu laughs, says the line, then holds his cup deadpan. Lip-sync = clip's speech envelope.
+//  Actions: Battery stirs his coffee, sips it, then eyes Kalu; Kalu stays dead serious, says the line, then holds his cup deadpan. Lip-sync = clip's speech envelope.
 import { W, H, bind, ctx, lerp, clamp, easeOut, pr, captions, groupWords, finish } from '../toon/toon.js';
 import { kpSeated } from '../toon/kp.js';
 const META = await (await fetch('/data/meta.json')).json();
@@ -21,7 +21,7 @@ const sm = (u) => { u = clamp(u, 0, 1); return u * u * (3 - 2 * u) };
 const seg = (t, a, b) => sm((t - a) / (b - a));
 const blink = (t, ph) => ((t + ph) % 3.7) < .12;
 // ---------- characters ----------
-const KALU = { skin: '#8A5536', hat: true, sun: true, top: 'shirt', suit: true, topCol: '#1D1D23', tie: '#2A2A33', pant: '#17171B', shoe: '#0E0E10', stubble: true };
+const KALU = { skin: '#8A5536', head: 'square', hat: true, hatCol: '#15151A', hatChk: '#4C4E5A', hatBand: '#3A3A44', sun: true, top: 'shirt', suit: true, topCol: '#1D1D23', tie: '#2A2A33', pant: '#17171B', shoe: '#0E0E10', stubble: true };
 const BATT = { skin: '#C9976A', hair: 'mane', hairCol: '#3A2B22', specs: 'clear', top: 'shirt', suit: true, topCol: '#EDE5D2', tie: '#B3A878', tieStripe: '#6E6745', pant: '#E3DAC4', shoe: '#6B4A32' };
 const S = .86, HY = 1180, TT = 1075, BX = 340, KX = 740, SH = { near: [-70, -300], far: [78, -312] }, LEN = 146;
 // two-bone IK in the body's local frame: hand to a WORLD target
@@ -69,7 +69,7 @@ function backdrop(t, z) {
 function booth(x0, x1) { c.save(); c.beginPath(); c.roundRect(x0, 700, x1 - x0, 760, 70); c.fillStyle = '#B22B2D'; c.fill(); c.lineWidth = 5; c.strokeStyle = '#1E1814'; c.stroke(); c.fillStyle = 'rgba(0,0,0,.18)'; c.fillRect(x0 + 10, 1010, x1 - x0 - 20, 20); c.fillStyle = 'rgba(255,255,255,.12)'; c.beginPath(); c.roundRect(x0 + 24, 720, 40, 270, 18); c.fill(); c.restore() }
 function table() { c.save(); c.fillStyle = '#2C1814'; c.fillRect(402, TT + 12, 276, 330); c.fillStyle = '#4A2A22'; c.beginPath(); c.moveTo(384, TT + 14); c.lineTo(410, TT - 14); c.lineTo(670, TT - 14); c.lineTo(696, TT + 14); c.closePath(); c.fill(); c.lineWidth = 5; c.strokeStyle = '#1E1814'; c.stroke(); c.fillStyle = 'rgba(255,220,180,.14)'; c.fillRect(425, TT - 8, 200, 5); c.restore() }
 // ---------- acting ----------
-function talk(k, t, style = 'talk') { const a = env(k, t); return a > .06 ? { mouth: style, open: clamp(a * 1.05, .2, .8), wide: .21, wideNow: nz(t * 1.7, k === 'k' ? 1 : 5) * .3 } : null }
+function talk(k, t, style = 'talk') { const a = env(k, t), K = k === 'k'; return a > .06 ? { mouth: style, open: K ? clamp(a * .8, .12, .42) : clamp(a * 1.05, .2, .8), wide: K ? .16 : .21, wideNow: nz(t * 1.7, K ? 1 : 5) * (K ? .1 : .3) } : null }   // Kalu: tight, flat, serious mouth
 const CUPB = [478, TT], CUPK = [610, TT];
 function battery(t) {
   let f = { brow: -.55, lid: .15, look: [.9, 0], mouth: 'flat' }, lean = 0, tilt = 0, nod = 0, hold = null;
@@ -93,18 +93,17 @@ function battery(t) {
   return { face: f, arms: { near, far }, lean, nod, headTilt: tilt, hold };
 }
 function kalu(t) {
-  let f = { brow: .2, look: [.9, 0], mouth: 'smile', wide: .3 }, lean = 0, tilt = 0, hop = 0;
+  let f = { brow: .2, look: [.9, 0], mouth: 'flat', wide: .3 }, lean = 0, tilt = 0, hop = 0;
   const restN = { ...ik(KX, true, 'near', 690, TT - 18), hand: 'rest' }, restF = { ...ik(KX, true, 'far', 600, TT - 16), hand: 'rest' };
   let near = restN, far = restF, hold = null;
-  const laugh = (u) => ({ mouth: 'laugh', open: .45 + Math.abs(Math.sin(t * 13)) * .5, wide: .3 });
-  if (t < .2) { f = { brow: .5, look: [.9, 0], mouth: 'smile', wide: .36 } }
-  else if (t < .75) { const sp = talk('k', t, 'laugh'); f = { brow: .6, look: [.9, 0], mouth: 'smile', wide: .36, ...(sp || {}) }; tilt = .03 }               // "Hello." big grin
-  else if (t < 1.9) { f = { brow: .7, ...laugh(), look: [.9, 0] }; hop = Math.abs(Math.sin(t * 13)) * 7; tilt = -.1 + Math.sin(t * 13) * .02; lean = -.03 }   // laughs out loud
-  else if (t < 2.7) { f = { brow: .35, look: [.9, 0], mouth: 'smile', wide: .3 }; tilt = -.04 }
-  else if (t < 3.5) { const sp = talk('k', t, 'laugh'); f = { brow: .6, look: [.9, 0], mouth: 'smile', wide: .34, ...(sp || {}) }; tilt = .04; lean = .02 }       // "I am Kala."
-  else if (t < 6.77) { const u = seg(t, 3.5, 3.9); f = { brow: .55, look: [.9, 0], mouth: 'laugh', open: .3 + .25 * Math.abs(Math.sin(t * 9)) * u, wide: .3 }; hop = Math.abs(Math.sin(t * 9)) * 4 * u; tilt = -.05 + Math.sin(t * 2.5) * .02; if (t > 5.6) f = { brow: .3, look: [.8, .15], mouth: 'smirk', wide: .3 } }   // keeps chuckling, then smirks
-  else if (t < 9.0) { f = { brow: .2, look: [.9, 0], mouth: 'smirk', wide: .3 } }
-  else { f = { brow: .1, look: [.9, 0], mouth: 'flat' } }
+  // sarcastically serious: Kalu never laughs or even grins, only a flat deadpan with small brow acting
+  if (t < .2) { f = { brow: -.1, look: [.9, 0], mouth: 'flat', wide: .3 } }
+  else if (t < .75) { const sp = talk('k', t, 'talk'); f = { brow: .15, browUp: .2, look: [.9, 0], mouth: 'flat', wide: .3, ...(sp || {}) }; tilt = .02 }                  // "Hello." flat, confident
+  else if (t < 2.7) { f = { brow: -.15, look: [.9, 0], mouth: 'flat', wide: .3 }; tilt = Math.sin(t * 1.6) * .015 }                                                  // stays still, unbothered
+  else if (t < 3.5) { const sp = talk('k', t, 'talk'); f = { brow: -.3, look: [.9, 0], mouth: 'flat', wide: .3, ...(sp || {}) }; tilt = .03; lean = .015 }               // "I am Kala." dead serious
+  else if (t < 6.77) { f = { brow: -.2, look: [.9, 0], mouth: 'flat', wide: .3 }; tilt = Math.sin(t * 1.4) * .012; if (t > 5.6) f.look = [.8, .15] }                // watches Battery stir his coffee
+  else if (t < 9.0) { f = { brow: -.15, look: [.9, 0], mouth: 'flat', wide: .3 } }
+  else { f = { brow: -.1, look: [.9, 0], mouth: 'flat' } }
   // cup to the chest from 8.2, held in both hands (deadpan close-up from 11.33)
   const up = seg(t, 8.2, 9.4);
   if (t > 8.2) { const cx = lerp(CUPK[0], KX - 125 * S, up), cy = lerp(CUPK[1], HY - 215 * S, up); near = { ...ik(KX, true, 'near', cx + 22 * 0 - 4, cy - 28), hand: 'fist' }; far = { ...ik(KX, true, 'far', cx - 30, cy - 36), hand: 'fist' }; hold = { x: cx, y: cy } }
