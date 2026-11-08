@@ -52,10 +52,9 @@ function shop(t) {
   if (t < S1s - .3) { f = { brow: .15, look: [.9, 0], mouth: 'smile', wide: .22 }; tilt = Math.sin(t * 2) * .01; if (blink(t, .7)) f = { ...f, closed: 'flat' } }
   else if (t < K2s - .2) { const sp = talkS(t); f = { brow: -.15, browUp: .4, look: [.9, -.05], mouth: 'smirk', wide: .26, ...(sp || {}) }; tilt = -.05; nod = -.15 + Math.sin(t * 6) * .04; lean = -.02 }   // smug, chin up: "Do sau ki."
   else if (t < K2e - .2) { f = { brow: -.05, look: [.9, 0], mouth: 'flat', wide: .22 }; tilt = -.02; nod = -.05 + seg(t, K2s, K2e) * .12 }   // smile slowly dies while he listens
-  else if (t < K2e + .35) { f = { brow: .3, browUp: .2, lid: .1, look: [.9, 0], mouth: 'flat', wide: .22 }; nod = .1 }   // one beat of blank silence
   else { // quiet disappointment: heavy lids, inner brows up, small frown, eyes drop, a slow head shake and a long sigh
-    const u = t - (K2e + .35), shake = Math.sin(u * 3.2) * .05 * seg(u, .3, 1.0) * (1 - seg(u, 1.6, 2.2));
-    f = { brow: .65, browUp: -.1, lid: .45 + seg(u, 0, .5) * .1, look: [.7, .55 - seg(u, 1.2, 1.7) * .5], mouth: 'sad', wide: .2 }; tilt = .08 + shake; nod = .35 * seg(u, 0, .7) - .05 * seg(u, 1.4, 2); lean = -.03 * seg(u, 0, .8);
+    const u = t - K2e, shake = Math.sin(u * 3.2) * .05 * seg(u, .2, .8) * (1 - seg(u, 1.6, 2.2));
+    f = { brow: .65, browUp: -.1, lid: .45 + seg(u, 0, .3) * .1, look: [.7, .55 - seg(u, 1.2, 1.7) * .5], mouth: 'sad', wide: .2 }; tilt = .08 + shake; nod = .35 * seg(u, 0, .45) - .05 * seg(u, 1.4, 2); lean = -.03 * seg(u, 0, .5);
     if (blink(t, 1.1) && u > 1) f = { ...f, closed: 'flat', brow: .65 }
   }
   near = lerpA(HANG.near, hold, up); if (up > .02) chakriHeld = handW(SX, true, 'near', near);
@@ -123,9 +122,7 @@ export function draw(t) {
   c.save(); c.setTransform(1, 0, 0, 1, 0, 0);
   let shot = 'W', z = 1.38 + t * .006, cx = 540, cy = 1010;
   if (t >= 2.55 && t < 4.25) { shot = 'B'; const u = (t - 2.55) / 1.7; z = 2.15 + u * .1; cx = 735 + u * 6; cy = 790 }
-  else if (t >= 4.25 && t < 6.15) { shot = 'K'; const u = (t - 4.25) / 1.9; z = 2.2 + u * .1; cx = 345; cy = 815 + Math.sin(t * 20) * 2 }
-  else if (t >= 6.15 && t < 7.0) { shot = 'W'; z = 1.45; cx = 545; cy = 1010 }
-  else if (t >= 7.0) { shot = 'B2'; const u = (t - 7.0) / (DUR - 7.0); z = 2.0 + u * .35; cx = 745 + u * 10; cy = 800 - u * 10 }
+  else if (t >= 4.25) { shot = 'W2'; const u = (t - 4.25) / (DUR - 4.25); z = 1.36 + u * .12; cx = 540 + u * 20; cy = 1000 - u * 40 }   // full scene, both characters, to the end
   c.translate(W / 2, H / 2); c.scale(z, z); c.translate(-cx, -cy);
   drawBackdrop(t);
   const ks = kalu(t), ss = shop(t);
