@@ -77,6 +77,7 @@ export function kpHead(o) {
   line(c, [[fx + tn * r * .14 - r * .02, r * .2], [fx + tn * r * .2 + r * .1, r * .33, fx + tn * r * .1, r * .38]], 4.5, dark(sk, .45));
   // mouth
   mouth(c, fx + tn * r * .06, r * .6, r, f, sk);
+  if (o.mustache) { const mx = fx + tn * r * .06, my = r * .5; shape(c, [[mx - r * .42, my + r * .02], [mx - r * .3, my - r * .1, mx - r * .08, my - r * .04], [mx, my - r * .02], [mx + r * .08, my - r * .04], [mx + r * .3, my - r * .1, mx + r * .42, my + r * .02], [mx + r * .36, my + r * .12], [mx + r * .16, my + r * .05], [mx, my + r * .02], [mx - r * .16, my + r * .05], [mx - r * .36, my + r * .12]], o.mustache, 4) }   // thick moustache
   // hair (front)
   if (o.hair === 'kalu') {
     shape(c, [[-r * .98, -r * .1], [-r * 1.08, -r * .8, -r * .45, -r * 1.2, r * .1, -r * 1.14], [r * .7, -r * 1.12, r * 1.06, -r * .76, r * 1.0, -r * .12], [r * .86, -r * .46], [r * .62, -r * .34], [r * .52, -r * .62], [r * .22, -r * .42], [r * .06, -r * .72], [-r * .22, -r * .46], [-r * .4, -r * .74], [-r * .62, -r * .42], [-r * .8, -r * .58]], o.hairCol, LW,
@@ -89,6 +90,8 @@ export function kpHead(o) {
     shape(c, [[-r * 1.0, r * .36], [-r * 1.08, -r * .2], [-r * 1.08, -r * .95, -r * .4, -r * 1.25, 0, -r * 1.2], [r * .4, -r * 1.25, r * 1.08, -r * .95, r * 1.08, -r * .2], [r * 1.0, r * .36], [r * .92, r * .3], [r * .88, -r * .3], [r * .62, -r * .64], [r * .1, -r * .72], [0, -r * .92], [-r * .1, -r * .72], [-r * .62, -r * .64], [-r * .88, -r * .3], [-r * .92, r * .3]], o.hairCol, LW,
       () => { for (const sx of [-1, 1]) for (const k of [0, 1, 2]) line(c, [[sx * r * (.2 + k * .22), -r * 1.12 + k * r * .06], [sx * r * (.55 + k * .18), -r * .86 + k * r * .1, sx * r * (.9 + k * .02), -r * .3]], 3, o.hairHi || '#8E8A86') });
   }
+  if (o.topi) { shape(c, [[-r * .94, -r * .46], [-r * .98, -r * 1.0, -r * .4, -r * 1.2, 0, -r * 1.2], [r * .4, -r * 1.2, r * .98, -r * 1.0, r * .94, -r * .46], [r * .5, -r * .6], [-r * .5, -r * .6]], '#F4F1E8', LW, () => { c.fillStyle = dark('#F4F1E8', .1); c.fillRect(-r, -r * .66, r * 2, r * .12) }); line(c, [[-r * .9, -r * .54], [0, -r * .66], [r * .9, -r * .54]], 3, dark('#F4F1E8', .3)) }   // white Gandhi-style cap
+  if (o.tilak) { shape(c, [[fx - r * .04, -r * .58], [fx + r * .04, -r * .58], [fx + r * .03, -r * .34], [fx - r * .03, -r * .34]], '#D91E18', 2) }
   if (o.hat) drawHat(c, r, o);
   c.restore();
 }
