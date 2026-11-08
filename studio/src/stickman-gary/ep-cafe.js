@@ -2,7 +2,7 @@
 //  Kalu (main) = brown, black suit + tie, plaid fedora, black sunglasses, deadpan, never laughs; Battery = cream suit, clear specs, long centre-parted hair.
 //  Shots follow the clip: wide two-shot (0-6.77), close-up Battery over Kalu's shoulder (6.77-11.33), close-up Kalu over Battery's shoulder (11.33-15.31).
 //  Actions: Battery stirs his coffee, sips it, then eyes Kalu; Kalu stays dead serious, says the line, then holds his cup deadpan. Lip-sync = clip's speech envelope.
-import { W, H, bind, ctx, lerp, clamp, easeOut, pr, captions, groupWords, finish } from '../toon/toon.js';
+import { W, H, bind, ctx, lerp, clamp, easeOut, pr, label, captions, groupWords, finish } from '../toon/toon.js';
 import { kpSeated } from '../toon/kp.js';
 const META = await (await fetch('/data/meta.json')).json();
 const ENV = await (await fetch('/data/env.json')).json();
@@ -172,6 +172,7 @@ export function draw(t) {
   if (kst.hold) { fingers(kst.hold.x - 22, kst.hold.y - 24, KALU.skin, 0); fingers(kst.hold.x + 20, kst.hold.y - 22, KALU.skin, 0) }
   if (shot === 'B') overShoulder('right', 'kalu', t); else if (shot === 'K') overShoulder('left', 'batt', t);
   c.restore();
+  label([["World's ", '#111'], ['shortest', '#D7261E'], [' conversation ever', '#111']], W / 2, 150, 50);
   captions(groups, t, KEYS, 1700); finish(t);
 }
 export const cues = [];
