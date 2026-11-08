@@ -3,10 +3,10 @@ import numpy as np, json, subprocess, re, sys
 from scipy.io import wavfile
 sys.path.insert(0,'../..'); import bgm
 SR=44100; L=json.load(open('lines.json'))
-CAP=[.16,.2,.14,.2,.2,.14,.2,.55]
-SPD=[1.1,1.0,1.1,1.1,1.0,1.1,1.0,1.0]
-GAIN=[.105,.08,.105,.09,.07,.1,.085,.08]
-BEFORE=[.3,.2,.45,.12,.3,2.2,.35,.7]
+CAP=[.16,.3,.14,.3,.2,.14,.4]
+SPD=[1.1,.95,1.1,.95,1.1,1.1,.95]
+GAIN=[.105,.08,.105,.08,.09,.1,.08]
+BEFORE=[.3,.25,.45,.35,.12,2.2,.7]
 TAIL=.8
 def tight(x,cap):
     h=int(.012*SR); e=np.convolve(np.abs(x),np.ones(h)/h,'same'); th=max(.012,e.max()*.05)

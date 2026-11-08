@@ -18,7 +18,7 @@ const nz = (t, k) => Math.sin(t * 17.3 + k) * .5 + Math.sin(t * 9.1 + k * 2) * .
 const speaking = (sp, t) => TL.some(([s, a, b]) => s === sp && t >= a - .05 && t <= b);
 const S = .86, HY = 1180, LIFT = 205, FLOOR = 1412, LEN = 146, SH = { near: [-70, -300], far: [78, -312] };
 const KX = 730, BX = 390, MX = 1075, SL = 250, SR = 960;
-const KAL = { ...KALU_CHILL, hair: 'kalu', hairCol: '#1B1411' };
+const KAL = { ...KALU_CHILL, sun: true, hair: 'kaluSq', hairCol: '#1B1411' };
 const BAT = { ...BATTERY, specs: 'clear', specCol: '#1A1A1E' };
 const MOM = { skin: '#B3764E', hair: 'mane', hairCol: '#2B1D18', top: 'tee', topCol: '#D9467F', pant: '#C23A70', shoe: '#6B4A32' };
 function ik(X, flip, hy, side, tx, ty) {
@@ -65,9 +65,9 @@ const SIPS = [[1.0, 2.3], [15.6, 16.8]];
 const sipAmt = (t) => SIPS.reduce((m, [a, b]) => Math.max(m, seg(t, a, a + .4) * (1 - seg(t, b - .35, b))), 0);
 function kalu(t) {
   const sp = speaking('k', t), sip = sipAmt(t);
-  let f = { brow: -.05, lid: .42, look: [.9, .05], mouth: 'flat', wide: .3 };
-  if (sp) f = { brow: -.1, lid: .38, look: [.9, .05], mouth: 'talk', open: clamp(env('k', t) * .8, .12, .42), wide: .16, wideNow: nz(t * 1.7, 1) * .1 };
-  if (t > 4.7 && t < 8) f = { ...f, look: [.35, .05] };                // glances back at his mom
+  let f = { brow: -.1, look: [.9, 0], mouth: 'flat', wide: .3 };
+  if (sp) f = { brow: -.1, look: [.9, 0], mouth: 'talk', open: clamp(env('k', t) * .6, .1, .3), wide: .14, wideNow: nz(t * 1.2, 1) * .06 };
+                  // glances back at his mom
   const rest = { ...ik(KX, true, HY, 'near', KX - 80, HY - 240), hand: 'fist' }, restF = { ...ik(KX, true, HY, 'far', KX - 70, HY - 220), hand: 'fist' };
   const mouthP = [KX - S * 6 - 62, HY - S * 470 + 78];
   const gx = lerp(KX - 80, mouthP[0] - 8, sip), gy = lerp(HY - 240, mouthP[1] + 18, sip);
@@ -79,15 +79,15 @@ function battery(t) {
   const sp = speaking('b', t), ring = t >= PH.r0 && t < PH.pick, listen = t >= PH.pick && t < 99;
   const look = clamp((t - PH.r0) / .4, 0, 1);
   let f = { brow: .15, lid: .42, look: [.9, .12], mouth: 'flat', wide: .2 };
-  if (t > 4.7 && t < 8) f.look = [.5, .1];
-  if (sp) f = { ...f, brow: t > 18 ? .55 : .25, mouth: 'talk', open: clamp(env('b', t) * 1.0, .18, .7), wide: .21, wideNow: nz(t * 1.7, 5) * .25 };
+  if (t > 5.2 && t < 8.1) f.look = [.5, .1];
+  if (sp) f = { ...f, brow: .25, mouth: 'talk', open: clamp(env('b', t) * 1.0, .18, .7), wide: .21, wideNow: nz(t * 1.7, 5) * .25 };
   if (ring) f = { brow: .2, lid: .4, look: [.7, .55 * look + .12 * (1 - look)], mouth: 'flat' };
-  if (listen && !sp) f = { brow: t > 15 ? .5 : .3, lid: .38, look: [.85, .2], mouth: t > 17 ? 'sad' : 'flat' };
-  if (t > 19.5) f = { ...f, mouth: sp ? f.mouth : 'sad' };
+  if (listen && !sp) f = { brow: t > 15 ? .5 : .3, lid: .38, look: [.85, .2], mouth: t > 17.3 ? 'sad' : 'flat' };
+  if (t > TL[5][2] - .2) f = { ...f, brow: .6, mouth: 'sad' };
   const hx = BX - S * 6, hyd = HY - S * 470;
   const lap = { x: BX - 20, y: HY - 215 };
   const earT = [hx + 98, hyd + 20];
-  const up = seg(t, PH.pick - .15, PH.pick + .55) * (t < 22.4 ? 1 : 1 - seg(t, 22.4, 23.2));
+  const up = seg(t, PH.pick - .15, PH.pick + .55) * (t < TL[5][2] + .5 ? 1 : 1 - seg(t, TL[5][2] + .5, TL[5][2] + 1.2));
   const hold = t >= PH.r0 - .2 ? 1 : 0;
   const tgt = [lerp(lap.x, earT[0], up), lerp(lap.y, earT[1], up)];
   const near = hold ? { ...ik(BX, true, HY, 'near', tgt[0], tgt[1]), hand: 'fist' } : { ...ik(BX, true, HY, 'near', BX - 40, HY - 210), hand: 'rest' };
@@ -98,15 +98,15 @@ function mom(t) {
   const sp = speaking('m', t), m = env('m', t), hy = HY - LIFT * S;
   let f = { brow: -.3, look: [.8, .05], mouth: 'flat', wide: .25 };
   if (sp) f = { brow: -.4, look: [.8, .05], mouth: 'talk', open: clamp(m * .9, .15, .65), wide: .22, wideNow: nz(t * 1.7, 3) * .2 };
-  const pointing = (t > .3 && t < 3.6) || (t > 4.8 && t < 7.9);
+  const pointing = (t > .3 && t < 3.6) || (t > 5.2 && t < 8.0);
   const wag = pointing ? Math.sin(t * 8) * 12 * m : 0;
   const near = pointing ? { ...ik(MX, true, hy, 'near', MX - 215, hy - 40 + wag), hand: 'point' } : { ...ik(MX, true, hy, 'near', MX - 70, hy + 200), hand: 'fist' };
   const far = { ...ik(MX, true, hy, 'far', MX - 94, hy - 120), hand: 'fist' };   // hand on hip
   return { face: f, arms: { near, far }, hy, headTilt: pointing ? -.03 + Math.sin(t * 6) * .02 * m : 0 };
 }
 function camera(t) {
-  const [a, b, c1, d, e] = [TL[3][1], TL[4][1], TL[5][1], TL[6][1], TL[7][1]];
-  const K = [[0, 1.0, 700, 1000], [3.65, 2.0, 700, 800], [4.75, 1.0, 700, 1000], [a - .1, 1.9, 420, 820], [b - .1, 2.1, 700, 800], [b + .85, 1.7, 460, 860], [e - .15, 2.1, 700, 800]];
+  const [a, b, e] = [TL[4][1], TL[3][1], TL[6][1]];
+  const K = [[0, 1.0, 700, 1000], [3.65, 2.0, 700, 800], [5.15, 1.0, 700, 1000], [b - .1, 2.1, 700, 800], [a - .1, 1.9, 420, 820], [PH.r0 - .1, 1.7, 460, 860], [e - .15, 2.1, 700, 800]];
   let i = 0; while (i + 1 < K.length && t >= K[i + 1][0]) i++;
   const k = K[i], u = clamp((t - k[0]) / ((K[i + 1] ? K[i + 1][0] : DUR) - k[0])), push = 1 + u * .05;
   return { z: k[1] * push, cx: k[2], cy: k[3] };

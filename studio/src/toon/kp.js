@@ -82,6 +82,9 @@ export function kpHead(o) {
   if (o.hair === 'kalu') {
     shape(c, [[-r * .98, -r * .1], [-r * 1.08, -r * .8, -r * .45, -r * 1.2, r * .1, -r * 1.14], [r * .7, -r * 1.12, r * 1.06, -r * .76, r * 1.0, -r * .12], [r * .86, -r * .46], [r * .62, -r * .34], [r * .52, -r * .62], [r * .22, -r * .42], [r * .06, -r * .72], [-r * .22, -r * .46], [-r * .4, -r * .74], [-r * .62, -r * .42], [-r * .8, -r * .58]], o.hairCol, LW,
       () => { c.fillStyle = light(o.hairCol, .14); c.beginPath(); c.ellipse(-r * .1, -r * .98, r * .45, r * .08, -.15, 0, 7); c.fill() });
+  } else if (o.hair === 'kaluSq') {   // full cap of short hair over the square skull (covers both top corners), fringe along the forehead
+    shape(c, [[-r * 1.05, -r * .42], [-r * 1.1, -r * .95, -r * .82, -r * 1.12, -r * .5, -r * 1.12], [r * .5, -r * 1.12], [r * .82, -r * 1.12, r * 1.1, -r * .95, r * 1.05, -r * .42], [r * .92, -r * .5], [r * .7, -r * .64], [r * .48, -r * .5], [r * .24, -r * .66], [0, -r * .52], [-r * .24, -r * .68], [-r * .48, -r * .52], [-r * .7, -r * .64], [-r * .92, -r * .5]], o.hairCol, LW,
+      () => { c.fillStyle = light(o.hairCol, .14); c.beginPath(); c.ellipse(-r * .1, -r * .98, r * .5, r * .08, -.1, 0, 7); c.fill() });
   } else if (o.hair === 'battery') {
     shape(c, [[-r * 1.0, -r * .12], [-r * 1.06, -r * .9, -r * .2, -r * 1.24, r * .5, -r * 1.06], [r * 1.0, -r * .9, r * 1.08, -r * .4, r * 1.0, -r * .1], [r * .9, -r * .5, r * .5, -r * .66, r * .1, -r * .6], [-r * .3, -r * .74, -r * .7, -r * .6, -r * .86, -r * .36]], o.hairCol, LW,
       () => { c.fillStyle = light(o.hairCol, .14); c.beginPath(); c.ellipse(r * .2, -r * .98, r * .5, r * .08, .1, 0, 7); c.fill(); line(c, [[-r * .35, -r * 1.05], [-r * .1, -r * .78, r * .1, -r * .66]], 3, light(o.hairCol, .2)) });

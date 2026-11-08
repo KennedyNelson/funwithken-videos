@@ -9,50 +9,43 @@
 {
 "line": 1,
 "sp": "k",
-"start": 3.73,
-"end": 4.365,
+"start": 3.78,
+"end": 4.776,
 "text": "Bavan."
 },
 {
 "line": 2,
 "sp": "m",
-"start": 4.815,
-"end": 7.908,
-"text": "Sharma ji ke bete ne toh IIT mein startup bhi khol liya!"
+"start": 5.226,
+"end": 8.004,
+"text": "Sharma ji ke bete ne toh ek bada startup bhi khol liya!"
 },
 {
 "line": 3,
-"sp": "b",
-"start": 8.028,
-"end": 11.564,
-"text": "Namaste aunty... aakhri baar 2019 mein soya tha."
+"sp": "k",
+"start": 8.354,
+"end": 9.393,
+"text": "Accha."
 },
 {
 "line": 4,
-"sp": "k",
-"start": 11.864,
-"end": 12.411,
-"text": "Accha."
+"sp": "b",
+"start": 9.513,
+"end": 13.049,
+"text": "Namaste aunty... aakhri baar 2019 mein soya tha."
 },
 {
 "line": 5,
 "sp": "bm",
-"start": 14.611,
-"end": 18.49,
+"start": 15.249,
+"end": 19.127,
 "text": "Beta! Kalu se seekh! Dekh kitna shaant hai, zara bhi tension nahi!"
 },
 {
 "line": 6,
-"sp": "b",
-"start": 18.84,
-"end": 20.834,
-"text": "Mummy... par neend nahi aati..."
-},
-{
-"line": 7,
 "sp": "k",
-"start": 21.534,
-"end": 23.96,
-"text": "Bavan percent. Par zinda hoon."
+"start": 19.827,
+"end": 23.15,
+"text": "Bavan percent. Mast jee raha hoon."
 }
 ]
