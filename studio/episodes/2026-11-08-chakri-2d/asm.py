@@ -1,17 +1,17 @@
-# Audio + timing for the 2D chakri reel. Voices: Kalu = Chris (ElevenLabs eleven_v3), shopkeeper = Bill. Raw mp3s in raw/ (k1, s1, k2).
+# Audio + timing for the 2D chakri reel. Voices: ElevenLabs eleven_v4 TTS (see raw/*.mp3); ends on 3 s of the shopkeeper's disappointed face, no closing line. Raw mp3s in raw/ (k1, s1, k2).
 # usage: python3 asm.py   -> data/mix.wav, data/words.json, data/env.json, data/meta.json
 import numpy as np, json, re, subprocess
 from scipy.io import wavfile
 L = json.load(open('lines.json')); SR = 16000
-files = ['raw/k1.mp3', 'raw/s1.mp3', 'raw/k2.mp3']; tempo = [1.0, 1.08, 1.1]
+files = ['raw/k1.mp3', 'raw/s1.mp3', 'raw/k2.mp3']; tempo = [1.0, 1.0, 1.0]
 def load(f, tp):
     af = f'silenceremove=start_periods=1:start_threshold=-38dB:start_silence=0.03,areverse,silenceremove=start_periods=1:start_threshold=-38dB:start_silence=0.05,areverse,atempo={tp},loudnorm=I=-15:TP=-1.5'
     p = subprocess.run(['ffmpeg', '-nostdin', '-v', 'error', '-i', f, '-af', af, '-ac', '1', '-ar', str(SR), '-f', 'f32le', '-'], capture_output=True).stdout
     return np.frombuffer(p, dtype=np.float32)
 clips = [load(f, t) for f, t in zip(files, tempo)]
 d = [len(c) / SR for c in clips]; print('trimmed durations', d)
-starts = [1.0]; starts.append(starts[0] + d[0] + .35); starts.append(starts[1] + d[1] + .45)
-DUR = round(starts[2] + d[2] + 2.6, 2)
+starts = [.6]; starts.append(starts[0] + d[0] + .2); starts.append(starts[1] + d[1] + .25)
+DUR = round(starts[2] + d[2] + 3.0, 2)
 mix = np.zeros(int(DUR * SR) + SR, dtype=np.float32)
 for s, c in zip(starts, clips): i = int(s * SR); mix[i:i + len(c)] += c * .9
 wavfile.write('data/mix16.wav', SR, (np.clip(mix, -1, 1) * 32767).astype(np.int16))
