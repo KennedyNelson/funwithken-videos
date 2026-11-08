@@ -41,7 +41,7 @@ function kalu(t) {
   else if (t < K2e + .25) {   // fast bargaining: deadpan face, jabbing finger, head bobs on every phrase
     const u = t - K2s, sp = talkK(t); f = { brow: -.4, look: [.9, 0], mouth: 'flat', wide: .3, ...(sp || {}) }; tilt = Math.sin(u * 10) * .035; lean = .018;
     near = { e: [95 + Math.sin(u * 8) * 6, 70], h: [200 + Math.sin(u * 17) * 14, 10 + Math.cos(u * 17) * 14], hand: 'point' };
-  } else { f = { brow: -.5, look: [.9, 0], mouth: 'flat', wide: .3 }; tilt = .02; near = lerpA({ e: [95, 70], h: [200, 10], hand: 'point' }, HANG.near, seg(t, K2e + .4, K2e + .9)); if (t > 8) f = { brow: -.3, look: [.9, .05], mouth: 'flat', wide: .3 } }
+  } else { f = { brow: -.5, look: [.9, 0], mouth: 'flat', wide: .3 }; tilt = .02; near = lerpA({ e: [95, 70], h: [200, 10], hand: 'point' }, HANG.near, seg(t, K2e + .4, K2e + .9)); if (t > 8.2) f = { brow: -.3, look: [.9, .05], mouth: 'flat', wide: .3 } }
   return { face: f, arms: { near, far }, lean, nod: 0, headTilt: tilt, hop, x: lerp(120, KX0, easeOut(walk)) };
 }
 let chakriHeld = null;
@@ -54,7 +54,8 @@ function shop(t) {
   else if (t < K2e - .2) { f = { brow: -.05, look: [.9, 0], mouth: 'flat', wide: .22 }; tilt = -.02; nod = -.05 + seg(t, K2s, K2e) * .12 }   // smile slowly dies while he listens
   else { // quiet disappointment: heavy lids, inner brows up, small frown, eyes drop, a slow head shake and a long sigh
     const u = t - K2e, shake = Math.sin(u * 3.2) * .05 * seg(u, .2, .8) * (1 - seg(u, 1.6, 2.2));
-    f = { brow: .65, browUp: -.1, lid: .45 + seg(u, 0, .3) * .1, look: [.7, .55 - seg(u, 1.2, 1.7) * .5], mouth: 'sad', wide: .2 }; tilt = .08 + shake; nod = .35 * seg(u, 0, .45) - .05 * seg(u, 1.4, 2); lean = -.03 * seg(u, 0, .5);
+    const a2 = env('s', t), sp2 = a2 > .06 ? { mouth: 'talk', open: clamp(a2 * .55, .12, .4), wide: .2, wideNow: Math.sin(t * 17) * .08 } : null;   // his last line is spoken softly, still disappointed
+    f = { brow: .65, browUp: -.1, lid: .45 + seg(u, 0, .3) * .1, look: [.7, .55 - seg(u, 1.2, 1.7) * .5], mouth: 'sad', wide: .2, ...(sp2 || {}) }; tilt = .08 + shake; nod = .35 * seg(u, 0, .45) - .05 * seg(u, 1.4, 2); lean = -.03 * seg(u, 0, .5);
     if (blink(t, 1.1) && u > 1) f = { ...f, closed: 'flat', brow: .65 }
   }
   near = lerpA(HANG.near, hold, up); if (up > .02) chakriHeld = handW(SX, true, 'near', near);
@@ -121,8 +122,9 @@ function overShoulder(kind) {
 export function draw(t) {
   c.save(); c.setTransform(1, 0, 0, 1, 0, 0);
   let shot = 'W', z = 1.38 + t * .006, cx = 540, cy = 1010;
-  if (t >= 2.55 && t < 4.25) { shot = 'B'; const u = (t - 2.55) / 1.7; z = 2.15 + u * .1; cx = 735 + u * 6; cy = 790 }
-  else if (t >= 4.25) { shot = 'W2'; const u = (t - 4.25) / (DUR - 4.25); z = 1.36 + u * .12; cx = 540 + u * 20; cy = 1000 - u * 40 }   // full scene, both characters, to the end
+  const B0 = S1s - .4, B1 = K2s - .05;
+  if (t >= B0 && t < B1) { shot = 'B'; const u = (t - B0) / (B1 - B0); z = 2.15 + u * .1; cx = 735 + u * 6; cy = 790 }
+  else if (t >= B1) { shot = 'W2'; const u = (t - B1) / (DUR - B1); z = 1.36 + u * .12; cx = 540 + u * 20; cy = 1000 - u * 40 }   // full scene, both characters, to the end
   c.translate(W / 2, H / 2); c.scale(z, z); c.translate(-cx, -cy);
   drawBackdrop(t);
   const ks = kalu(t), ss = shop(t);
