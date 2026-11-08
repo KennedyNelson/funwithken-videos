@@ -4,9 +4,9 @@ from scipy.io import wavfile
 sys.path.insert(0,'../..'); import bgm
 SR=44100; L=json.load(open('lines.json'))
 CAP=[.16,.2,.14,.2,.2,.14,.2,.55]
-SPD=[1.1,1.0,1.1,1.18,1.0,1.1,1.0,1.0]
+SPD=[1.1,1.0,1.1,1.1,1.0,1.1,1.0,1.0]
 GAIN=[.105,.08,.105,.09,.07,.1,.085,.08]
-BEFORE=[.3,.2,.45,.12,.3,.9,.12,.7]
+BEFORE=[.3,.2,.45,.12,.3,2.2,.35,.7]
 TAIL=.8
 def tight(x,cap):
     h=int(.012*SR); e=np.convolve(np.abs(x),np.ones(h)/h,'same'); th=max(.012,e.max()*.05)
@@ -29,6 +29,9 @@ for i,(sp,txt) in enumerate(L):
     wavfile.write(f'data/t{i}.wav',SR,(y*32767).astype(np.int16))
     if SPD[i]!=1.0:
         subprocess.run(['ffmpeg','-nostdin','-v','error','-y','-i',f'data/t{i}.wav','-filter:a',f'atempo={SPD[i]}',f'data/p{i}.wav'],check=True); _,y=wavfile.read(f'data/p{i}.wav'); y=y.astype(float)/32768
+    if sp=='bm':
+        from scipy.signal import butter,lfilter
+        bb,aa=butter(3,[320/(SR/2),3200/(SR/2)],'band'); y=lfilter(bb,aa,y)
     y=y/np.sqrt((y**2).mean())*GAIN[i]
     t+=BEFORE[i]
     h=int(.012*SR); e=np.convolve(np.abs(y),np.ones(h)/h,'same'); voiced=e>e.max()*.07; cum=np.cumsum(voiced)/SR; tot=cum[-1]
@@ -39,6 +42,11 @@ for i,(sp,txt) in enumerate(L):
     T.append(dict(line=i,sp=sp,start=round(t,3),end=round(t+len(y)/SR,3),text=txt))
     segs.append((t,y,sp)); t+=len(y)/SR
 DUR=round(t+TAIL,2); N=int(DUR*SR); v=np.zeros(N)
+t6=segs[5][0]; R0=round(t6-2.0,3); PICK=round(t6-.55,3)
+def ring(a,dur):
+    tt=np.arange(int(dur*SR))/SR; g=((tt%.5)<.14)|(((tt%.5)>.2)&((tt%.5)<.34)); return np.sin(2*np.pi*880*tt)*.5*g*np.minimum(1,np.minimum(tt*40,(dur-tt)*40))*.05
+rg=ring(0,PICK-R0-.05); sfx=np.zeros(N); sfx[int(R0*SR):int(R0*SR)+len(rg)]=rg
+
 for s,y,sp in segs: i0=int(s*SR); v[i0:i0+len(y)]+=y
 v=v/np.abs(v).max()*.89
 n30=int(DUR*30)+1; env={k:[0]*n30 for k in ('k','b','m','bm')}
@@ -51,8 +59,8 @@ for s,y,sp in segs:
 b=bgm.make('lofi',DUR)[:N]; b=np.pad(b,(0,N-len(b)))
 duck=np.convolve((np.abs(v)>.02).astype(float),np.ones(int(.25*SR))/int(.25*SR),'same')
 bedgain=.15-.06*np.clip(duck*3,0,1)
-mix=np.clip(v+b*bedgain,-1,1); mix=mix/max(1,np.abs(mix).max()*1.02)
+mix=np.clip(v+sfx+b*bedgain,-1,1); mix=mix/max(1,np.abs(mix).max()*1.02)
 wavfile.write('data/mix.wav',SR,(mix*32767).astype(np.int16))
 json.dump(W,open('data/words.json','w')); json.dump(T,open('data/timing.json','w'),indent=0)
-json.dump(dict(dur=DUR,lines=[[d['sp'],d['start'],d['end']] for d in T]),open('data/meta.json','w')); json.dump(env,open('data/env.json','w'))
+json.dump(dict(dur=DUR,phone=dict(r0=R0,pick=PICK,l6=round(t6,3)),lines=[[d['sp'],d['start'],d['end']] for d in T]),open('data/meta.json','w')); json.dump(env,open('data/env.json','w'))
 print('DUR',DUR); [print(d['start'],d['end'],d['sp'],d['text'][:40]) for d in T]

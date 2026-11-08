@@ -19,3 +19,6 @@ export const KALU_FACES = {
   raisedBrow: { brow: .15, browUp: .5, look: [.9, 0], mouth: 'flat', wide: .3 },
   glanceDown: { brow: -.1, look: [.9, .45], mouth: 'flat', wide: .3 },
 };
+
+// Kalu 'chill at home' look (same body and face, no hat/shades/suit): plain tee + shorts. Owner directive 2026-11-08 for the Sharma ji story.
+export const KALU_CHILL = { ...KALU, hat: false, sun: false, suit: false, top: 'tee', topCol: '#5B7FA6', pant: '#6B6F4E', shorts: true, shoe: '#E8E8E4' };

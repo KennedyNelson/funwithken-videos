@@ -58,7 +58,7 @@ export function kpHead(o) {
     const lid = clamp(f.lid || 0, 0, 1); if (lid > 0) { c.fillStyle = sk; c.fillRect(x - w - 4, ey - eh - 4, 2 * w + 8, (2 * eh + 8) * lid * .9); c.restore(); line(c, [[x - w * .98, ey - eh + 2 * eh * lid * .9], [x, ey - eh + 2 * eh * lid * .9 + 4, x + w * .98, ey - eh + 2 * eh * lid * .9]], 5) } else c.restore();
   }
   // specs (Battery)
-  if (o.specs === 'clear') { c.lineWidth = 5; c.strokeStyle = '#C9D3DA'; for (const [x, w] of E) { c.beginPath(); c.roundRect(x - w - 8, ey - eh * .8 - 7, 2 * w + 16, eh * 1.6 + 14, 14); c.fillStyle = 'rgba(210,235,255,.14)'; c.fill(); c.stroke() } line(c, [[E[0][0] + E[0][1] + 8, ey - eh * .25], [E[1][0] - E[1][1] - 8, ey - eh * .25]], 5, '#C9D3DA'); line(c, [[E[0][0] - E[0][1] - 8, ey - eh * .3], [-r * .98, ey - eh * .15]], 4, '#C9D3DA'); line(c, [[E[1][0] + E[1][1] + 8, ey - eh * .3], [r * .98, ey - eh * .15]], 4, '#C9D3DA') }
+  if (o.specs === 'clear') { const SC = o.specCol || '#C9D3DA'; c.lineWidth = o.specCol ? 8 : 5; c.strokeStyle = SC; for (const [x, w] of E) { c.beginPath(); c.roundRect(x - w - 8, ey - eh * .8 - 7, 2 * w + 16, eh * 1.6 + 14, 14); c.fillStyle = 'rgba(210,235,255,.14)'; c.fill(); c.stroke() } line(c, [[E[0][0] + E[0][1] + 8, ey - eh * .25], [E[1][0] - E[1][1] - 8, ey - eh * .25]], 5, SC); line(c, [[E[0][0] - E[0][1] - 8, ey - eh * .3], [-r * .98, ey - eh * .15]], 4, SC); line(c, [[E[1][0] + E[1][1] + 8, ey - eh * .3], [r * .98, ey - eh * .15]], 4, SC) }
   if (o.specs === true) { c.lineWidth = 7; c.strokeStyle = '#2A2420'; for (const [x, w] of E) { c.beginPath(); c.ellipse(x, ey, w + 9, eh * .82 + 9, 0, 0, 7); c.stroke() } line(c, [[E[0][0] + E[0][1] + 6, ey - eh * .25], [E[1][0] - E[1][1] - 6, ey - eh * .25]], 6, '#2A2420') }
   if (o.sun && !f.sunOff) {   // black wayfarer-style sunglasses: big dark lenses with a glint; they hide the eyes, so brows + mouth carry the acting
     const lk = (f.look || [0, 0])[0] * 3;
@@ -144,7 +144,7 @@ export function kpSeated(o) {
     else tube(c, [[S[0], S[1] + 6], e, [lerp(e[0], h[0], .78), lerp(e[1], h[1], .78)]], [36, 30, 24], scol, { openStart: true, shade: () => {} });
   };
   // far leg, far arm (behind torso)
-  leg(c, [36, -6], L2([212, -24], [62, 215]), L2([226, 232], [70, 437]), pd, dark(o.shoe, .12), 1);
+  leg(c, [36, -6], L2([212, -24], [62, 215]), L2([226, 232], [70, 437]), pd, dark(o.shoe, .12), 1, o.shorts ? dark(sk, .12) : null);
   c.save(); c.rotate(lean); armDraw('far', o.arms.far, sk, td); c.restore();
   // torso (one shape incl. hips and shoulders)
   c.save(); c.rotate(lean);
@@ -166,12 +166,13 @@ export function kpSeated(o) {
   c.save(); c.translate(6, -470); c.translate(0, (o.nod || 0) * 18); c.rotate(o.headTilt || 0); kpHead({ r: 128, ...o, turn: o.turn == null ? .55 : o.turn }); c.restore();
   c.restore();
   // near leg (front)
-  leg(c, [-40, 2], L2([196, -6], [44, 218]), L2([204, 246], [54, 450]), pc, o.shoe, -1);
+  leg(c, [-40, 2], L2([196, -6], [44, 218]), L2([204, 246], [54, 450]), pc, o.shoe, -1, o.shorts ? sk : null);
   // near arm (front)
   c.save(); c.rotate(lean); armDraw('near', o.arms.near, sk, tc); c.restore();
   c.restore();
 }
-function leg(c, hip, knee, ank, col, shoe, k) {
+function leg(c, hip, knee, ank, col, shoe, k, bare) {
+  if (bare) { const m = [lerp(hip[0], knee[0], .55), lerp(hip[1], knee[1], .55)]; tube(c, [m, knee, ank], [44, 36, 28], bare, { openStart: true }); tube(c, [hip, m], [54, 50], col, { openStart: true }); line(c, [[knee[0] - 30, knee[1] + 10], [knee[0] - 6, knee[1] + 30]], 3, dark(bare, .25)); const x = ank[0], y = ank[1]; shape(c, [[x - 36, y + 10], [x - 34, y - 18], [x + 30, y - 22], [x + 66, y - 6, x + 74, y + 14], [x + 74, y + 26], [x - 38, y + 26]], shoe, 5, () => { c.fillStyle = dark(shoe, .2); c.fillRect(x - 40, y + 16, 120, 12) }); return }
   tube(c, [hip, knee, ank], [52, 40, 30], col, { openStart: true, shade: (L, R) => { c.fillStyle = dark(col, .1); c.beginPath(); c.ellipse((hip[0] + knee[0]) / 2, (hip[1] + knee[1]) / 2 + 30, 110, 16, 0, 0, 7); c.fill() } });
   line(c, [[knee[0] - 30, knee[1] + 10], [knee[0] - 6, knee[1] + 30]], 3, dark(col, .25));
   // shoe
