@@ -30,3 +30,10 @@ Pace (2026-11-07 Mom 5 min): 21.5 s, 8 short lines, 16 shots (cut every 0.7-2.5 
 ## 2026-11-08 — "World's shortest conversation ever" (café, Desi Goggle-Eye Toon, 15 s, with the clip's audio)
 - media 18135108208793328, caption "World's shortest conversation ever 🕶️☕" + #relatable #desihumor #indianreels #funnyreels #comedyreels #sarcasm #deadpan #coffee #kaalujokes
 - source: studio/episodes/2026-11-08-cafe-kala (ep-cafe.js); Kalu deadpan (no laughing), black fedora + sunglasses, square head; audio = owner's clip
+
+## 2026-11-09 — YouTube "Sharma Ji Ka Beta Is Crying Now" (https://www.youtube.com/watch?v=QR4rLOkvYUE) [channel: YouTube]
+- type 2 relatable comedy (owner asked for dark, then rejected exaggeration: final cut is dry and realistic); Desi Goggle-Eye Toon living room; 23.95 s, 7 lines, 7 shots; public, category 23, lang hi
+- script: Mom "...Tu kitne laaya?" / Kalu "Bavan." / Mom "...ek bada startup bhi khol liya!" / Kalu "Accha." / Battery "Namaste aunty... aakhri baar 2019 mein soya tha." / Battery's mom on phone "Kalu se seekh..." / Kalu "Bavan percent. Mast jee raha hoon."
+- voices (ElevenLabs eleven_v4_turbo): Kalu = Roger (chill tags, slowed to .95), Battery = Armaan, Kalu's mom = Keshavi, Battery's mom (phone, band-passed) = Rysa. About 400 credits across all takes and retakes (not re-checked).
+- lessons: owner rejected v1 (exaggerated crash, drip pole, tears, chappal, repeated lines, hand-only mom) and v2 (weird hair, no sunglasses, unneeded lines). See skill OWNER'S CLEAN-AND-REAL RULES.
+- source: studio/episodes/2026-11-08-sharma-ji (ep-sharma.js)
