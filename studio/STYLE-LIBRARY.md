@@ -50,3 +50,10 @@ Direction: "Bulgy-realistic hybrid", i.e. bigger readable faces from Style 1 wit
 - Battery: keep spectacles (round or rectangular clear frames), but eyes behind them as big white ovals with dot pupils; slightly softer body, cream suit default, relaxed bendy dance and reaction poses.
 - Body: head about 1/3 of height (Bulgy) with noodle limbs for comedy beats; allow a calm-realistic body variant for dialogue-only scenes.
 - Sets: build a richer background per reel (props with soft gradient shading, warm tone) so they stand out against the flat characters.
+
+## Deep-dive additions (wag_guy and kp_animatess, 2026-11-09)
+Full notes: research/WAG-GUY.md and research/KP-ANIMATESS.md.
+- Stationary character + scrolling heavy-blur background plate is the cheapest way to fake speed (kp).
+- Hit rule hypothesis from kp (n=20): moving gag + strong Indian visual contrast + 1-2 line label beats long text on a static frame (9 of 20 reels above 10x median, flops were static text-heavy scenes).
+- Hit rule from wag (n=16): festival/household ensembles and song moments with frozen-stare bystanders, beat-cut to a tight two-shot; the lead wears one saturated color against detailed warm rooms.
+- Both accounts put the same 5-hashtag block on every reel and write one short Hinglish line as the caption.
