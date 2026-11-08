@@ -27,6 +27,7 @@ function ik(X, flip, side, tx, ty) {
 }
 const handW = (X, flip, side, a) => [X + (flip ? -1 : 1) * S * (SH[side][0] + a.h[0]), HY - LIFT * S + S * (SH[side][1] + a.h[1])];
 const lerpA = (a, b, u) => ({ e: [lerp(a.e[0], b.e[0], u), lerp(a.e[1], b.e[1], u)], h: [lerp(a.h[0], b.h[0], u), lerp(a.h[1], b.h[1], u)], hand: u > .5 ? b.hand : a.hand });
+const T_OFF = S1e + .15, UPH = { e: [-6, 70], h: [78, -178], hand: 'rest' };
 const HANG = { near: { e: [-4, 150], h: [6, 292], hand: 'rest' }, far: { e: [6, 150], h: [0, 292], hand: 'rest' } };
 const blink = (t, ph) => ((t + ph) % 3.4) < .12;
 function talkK(t) { const a = env('k', t); return a > .06 ? { mouth: 'talk', open: clamp(a * .8, .12, .42), wide: .16, wideNow: Math.sin(t * 29) * .1 } : null }
@@ -38,10 +39,13 @@ function kalu(t) {
   if (t < K1s - .1) { tilt = -.02; far = { e: [20 + Math.sin(t * 13) * 6, 150], h: [-16 + Math.sin(t * 13) * 14, 290], hand: 'rest' } }
   else if (t < K1e + .3) { const sp = talkK(t); f = { brow: .12, browUp: .3, look: [.9, 0], mouth: 'flat', wide: .3, ...(sp || {}) }; tilt = .035 + Math.sin(t * 7) * .01; far = lerpA(HANG.far, { e: [70, 120], h: [150, 200], hand: 'point' }, seg(t, K1s - .1, K1s + .3)) }       // "chakri kitne ki di?" points at the chakri
   else if (t < K2s - .05) { f = { brow: -.2, look: [.9, 0], mouth: 'flat', wide: .3 }; far = lerpA({ e: [70, 120], h: [150, 200], hand: 'point' }, HANG.far, seg(t, K1e + .3, K1e + .7)); tilt = .0 }
-  else if (t < K2e + .25) {   // fast bargaining: deadpan face, jabbing finger, head bobs on every phrase
+  else if (t < K2e + .25) {   // fast bargaining, hands down, sunglasses already off
     const u = t - K2s, sp = talkK(t); f = { brow: -.4, look: [.9, 0], mouth: 'flat', wide: .3, ...(sp || {}) }; tilt = Math.sin(u * 10) * .035; lean = .018;
-    near = { e: [95 + Math.sin(u * 8) * 6, 70], h: [200 + Math.sin(u * 17) * 14, 10 + Math.cos(u * 17) * 14], hand: 'point' };
-  } else { f = { brow: -.5, look: [.9, 0], mouth: 'flat', wide: .3 }; tilt = .02; near = lerpA({ e: [95, 70], h: [200, 10], hand: 'point' }, HANG.near, seg(t, K2e + .4, K2e + .9)); if (t > 8.2) f = { brow: -.3, look: [.9, .05], mouth: 'flat', wide: .3 } }
+  } else { f = { brow: -.5, look: [.9, 0], mouth: 'flat', wide: .3 }; tilt = .02; if (t > 8.2) f = { brow: -.3, look: [.9, .05], mouth: 'flat', wide: .3 } }
+  // takes his sunglasses off right after the shopkeeper's price: far hand goes up to the face, whips them off, drops to his side holding them
+  const up = seg(t, T_OFF - .38, T_OFF), dn = seg(t, T_OFF + .02, T_OFF + .36);
+  if (up > 0) near = lerpA(lerpA(near, UPH, up), HANG.near, dn);
+  if (t >= T_OFF) f = { ...f, sunOff: true };
   return { face: f, arms: { near, far }, lean, nod: 0, headTilt: tilt, hop, x: lerp(120, KX0, easeOut(walk)) };
 }
 let chakriHeld = null;
@@ -119,10 +123,14 @@ function overShoulder(kind) {
   c.restore();
 }
 // ---------- draw ----------
+function sunHeld(x, y) {   // the sunglasses in his hand
+  c.save(); c.translate(x + 6, y + 4); c.rotate(-.5); for (const q of [-1, 1]) { c.beginPath(); c.roundRect(q * 22 - 19, -13, 38, 26, 9); c.fillStyle = '#0B0B0E'; c.fill(); c.lineWidth = 3; c.strokeStyle = '#050506'; c.stroke() }
+  c.fillStyle = '#050506'; c.fillRect(-6, -5, 12, 4); c.restore();
+}
 export function draw(t) {
   c.save(); c.setTransform(1, 0, 0, 1, 0, 0);
   let shot = 'W', z = 1.38 + t * .006, cx = 540, cy = 1010;
-  const B0 = S1s - .4, B1 = K2s - .05;
+  const B0 = S1s - .4, B1 = S1e - .2;
   if (t >= B0 && t < B1) { shot = 'B'; const u = (t - B0) / (B1 - B0); z = 2.15 + u * .1; cx = 735 + u * 6; cy = 790 }
   else if (t >= B1) { shot = 'W2'; const u = (t - B1) / (DUR - B1); z = 1.36 + u * .12; cx = 540 + u * 20; cy = 1000 - u * 40 }   // full scene, both characters, to the end
   c.translate(W / 2, H / 2); c.scale(z, z); c.translate(-cx, -cy);
@@ -132,6 +140,7 @@ export function draw(t) {
   counter(t);
   if (chakriHeld) { const [hx, hy] = chakriHeld; chakri(hx - 6, hy - 70, 62, 62, t * 6, 1) }
   kpSeated({ ...KALU, x: ks.x, y: HY, s: S, stand: 1, ...ks, hold: undefined });
+  if (t >= T_OFF) { const [gx, gy] = handW(ks.x, false, 'near', ks.arms.near); sunHeld(gx, gy) }
   if (shot === 'B') overShoulder('kalu'); else if (shot === 'K') overShoulder('shop');
   c.restore();
   label([['POV: ', '#111'], ['bargaining', '#D7261E'], [' on Diwali', '#111']], W / 2, 150, 50);

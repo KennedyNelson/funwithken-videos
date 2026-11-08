@@ -60,7 +60,7 @@ export function kpHead(o) {
   // specs (Battery)
   if (o.specs === 'clear') { c.lineWidth = 5; c.strokeStyle = '#C9D3DA'; for (const [x, w] of E) { c.beginPath(); c.roundRect(x - w - 8, ey - eh * .8 - 7, 2 * w + 16, eh * 1.6 + 14, 14); c.fillStyle = 'rgba(210,235,255,.14)'; c.fill(); c.stroke() } line(c, [[E[0][0] + E[0][1] + 8, ey - eh * .25], [E[1][0] - E[1][1] - 8, ey - eh * .25]], 5, '#C9D3DA'); line(c, [[E[0][0] - E[0][1] - 8, ey - eh * .3], [-r * .98, ey - eh * .15]], 4, '#C9D3DA'); line(c, [[E[1][0] + E[1][1] + 8, ey - eh * .3], [r * .98, ey - eh * .15]], 4, '#C9D3DA') }
   if (o.specs === true) { c.lineWidth = 7; c.strokeStyle = '#2A2420'; for (const [x, w] of E) { c.beginPath(); c.ellipse(x, ey, w + 9, eh * .82 + 9, 0, 0, 7); c.stroke() } line(c, [[E[0][0] + E[0][1] + 6, ey - eh * .25], [E[1][0] - E[1][1] - 6, ey - eh * .25]], 6, '#2A2420') }
-  if (o.sun) {   // black wayfarer-style sunglasses: big dark lenses with a glint; they hide the eyes, so brows + mouth carry the acting
+  if (o.sun && !f.sunOff) {   // black wayfarer-style sunglasses: big dark lenses with a glint; they hide the eyes, so brows + mouth carry the acting
     const lk = (f.look || [0, 0])[0] * 3;
     for (const [i, [x0, w0]] of E.entries()) { const x = x0 + (i ? 7 : -7), w = w0 * .86; c.beginPath(); c.roundRect(x - w - 6 + lk, ey - eh * .9 - 6, 2 * w + 12, eh * 1.8 + 12, 24); c.fillStyle = '#0B0B0E'; c.fill(); c.lineWidth = 6; c.strokeStyle = '#050506'; c.stroke();
       c.fillStyle = 'rgba(255,255,255,.35)'; c.beginPath(); c.ellipse(x - w * .35 + lk, ey - eh * .5, w * .32, eh * .12, -.5, 0, 7); c.fill(); c.fillStyle = 'rgba(255,255,255,.15)'; c.beginPath(); c.ellipse(x + w * .3 + lk, ey + eh * .35, w * .22, eh * .07, -.5, 0, 7); c.fill() }
