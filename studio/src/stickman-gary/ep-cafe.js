@@ -4,6 +4,7 @@
 //  Actions: Battery stirs his coffee, sips it, then eyes Kalu; Kalu stays dead serious, says the line, then holds his cup deadpan. Lip-sync = clip's speech envelope.
 import { W, H, bind, ctx, lerp, clamp, easeOut, pr, label, captions, groupWords, finish } from '../toon/toon.js';
 import { kpSeated } from '../toon/kp.js';
+import { KALU, BATTERY } from '../toon/kalu.js';
 const META = await (await fetch('/data/meta.json')).json();
 const ENV = await (await fetch('/data/env.json')).json();
 export const DUR = META.dur;
@@ -21,8 +22,7 @@ const sm = (u) => { u = clamp(u, 0, 1); return u * u * (3 - 2 * u) };
 const seg = (t, a, b) => sm((t - a) / (b - a));
 const blink = (t, ph) => ((t + ph) % 3.7) < .12;
 // ---------- characters ----------
-const KALU = { skin: '#8A5536', head: 'square', hat: true, hatCol: '#15151A', hatChk: '#4C4E5A', hatBand: '#3A3A44', sun: true, top: 'shirt', suit: true, topCol: '#1D1D23', tie: '#2A2A33', pant: '#17171B', shoe: '#0E0E10', stubble: true };
-const BATT = { skin: '#C9976A', hair: 'mane', hairCol: '#3A2B22', specs: 'clear', top: 'shirt', suit: true, topCol: '#EDE5D2', tie: '#B3A878', tieStripe: '#6E6745', pant: '#E3DAC4', shoe: '#6B4A32' };
+const BATT = BATTERY;   // canonical looks live in src/toon/kalu.js (Kalu canon)
 const S = .86, HY = 1180, TT = 1075, BX = 340, KX = 740, SH = { near: [-70, -300], far: [78, -312] }, LEN = 146;
 // two-bone IK in the body's local frame: hand to a WORLD target
 function ik(X, flip, side, tx, ty) {
