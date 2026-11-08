@@ -18,3 +18,11 @@ Pace (2026-11-07 Mom 5 min): 21.5 s, 8 short lines, 16 shots (cut every 0.7-2.5 
 - media 17897709009424844, caption "Avg conversation between boys 🧐" + #relatable #desihumor #indianreels #funnyreels #boys
 - source: studio/episodes/2026-11-07-gaali-kavita (ep-gaali-stick.js), audio = owner's clip with pauses 35.65-36.25 and 38.60-40.27 cut
 - first silent post was deleted by the owner; NOTE: hashtags go into the caption as plain "#", never %23
+
+## 2026-11-08 | YouTube | Type 1 funny knowledge | "Your Onion Has a Chemical Weapon"
+- link: https://www.youtube.com/watch?v=Cs7NlUQDouY (public, category 27 Education)
+- idea: villain red onion vs proud desi Papa who "doesn't cry, not even at weddings"; CHOP bursts the onion's cells, two kept-apart chemicals mix into a sly gas that stings his eyes, eyes flood to wash it out; sobbing "I'm NOT crying! The onion started it!"; tip: chill the onion + sharp knife = less gas; Mom's bangled hand drops a sack: "Now cut five kilos... for the wedding." (callback). Takeaway + sources in studio/episodes/2026-11-08-onion/script.json
+- style: Polished Desi Toon, first use on YouTube (cel-lit desi kitchen: window with orange floral curtains, steel dabbas, ladle rail, teal tile band, pressure cooker on gas stove, granite counter, wooden cabinets; macro cell insert; fridge insert) — studio/src/stickman-gary/ep-onion.js
+- voices: Brian (narrator), Bill (Papa), Sarah (Mom), eleven_v3, Devanagari-spelled English for Papa and Mom; BGM tense
+- credits: 540 used (377 left of 10,000, resets about 2026-12-05)
+- pace: 29.6 s, 9 lines, 16 shots (cuts every 1-2.5 s), punch-in + shake on CHOP, 3 simple science pictures, held sob beat, 3-shot tip montage, abrupt end on the sack of smirking onions (loops to the opening onion). Research: Composio wallet still empty; used YouTube Data API search via Zapier (works with the querystring param) + web. Our stats on 2026-11-08: Mom Said 5 Minutes 1,316 views; science explainers 5-19; AI chat 187.
