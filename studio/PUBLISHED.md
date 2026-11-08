@@ -26,3 +26,7 @@ Pace (2026-11-07 Mom 5 min): 21.5 s, 8 short lines, 16 shots (cut every 0.7-2.5 
 - voices: Brian (narrator), Bill (Papa), Sarah (Mom), eleven_v3, Devanagari-spelled English for Papa and Mom; BGM tense
 - credits: 540 used (377 left of 10,000, resets about 2026-12-05)
 - pace: 29.6 s, 9 lines, 16 shots (cuts every 1-2.5 s), punch-in + shake on CHOP, 3 simple science pictures, held sob beat, 3-shot tip montage, abrupt end on the sack of smirking onions (loops to the opening onion). Research: Composio wallet still empty; used YouTube Data API search via Zapier (works with the querystring param) + web. Our stats on 2026-11-08: Mom Said 5 Minutes 1,316 views; science explainers 5-19; AI chat 187.
+
+## 2026-11-08 — "World's shortest conversation ever" (café, Desi Goggle-Eye Toon, 15 s, with the clip's audio)
+- media 18135108208793328, caption "World's shortest conversation ever 🕶️☕" + #relatable #desihumor #indianreels #funnyreels #comedyreels #sarcasm #deadpan #coffee #kaalujokes
+- source: studio/episodes/2026-11-08-cafe-kala (ep-cafe.js); Kalu deadpan (no laughing), black fedora + sunglasses, square head; audio = owner's clip
