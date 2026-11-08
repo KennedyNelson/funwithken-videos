@@ -1,7 +1,7 @@
 // 2026-11-08 IG reel "Chakri bargain" (Diwali firecracker stall), Desi Goggle-Eye Toon, ~9 s, with voices.
 //  Kalu = KALU CANON (src/toon/kalu.js): square head, black plaid fedora, sunglasses, black suit, deadpan. Shopkeeper: mustache, white cap, tilak, mustard kurta.
-//  Beats: Kalu walks up (0-0.9) -> "Bhaiya, chakri kitne ki di?" (1.0) -> shopkeeper proudly shows a chakri "Do sau ki." (2.7)
-//  -> Kalu, fast and deadpan, "Bhaiya aapki g**nd ki baat nahi kar raha, sasta karo!" (4.35) -> shopkeeper's reaction is quiet DISAPPOINTMENT (6.65-end), not shock.
+//  Beats: Kalu walks up (0-0.9) -> "Bhaiya, chakri kitne ki di?" (1.0) -> shopkeeper proudly shows a chakri "Paanch sau ki." (2.7)
+//  -> Kalu, fast and deadpan, "Bhaiya aapki g**nd ki baat nahi kar raha, thoda sasta lagao!" (4.35) -> shopkeeper's reaction is quiet DISAPPOINTMENT (6.65-end), not shock.
 //  Shots: W wide 0-2.55 | B shopkeeper CU 2.55-4.25 | K Kalu CU 4.25-6.15 | W wide 6.15-7.0 | B2 shopkeeper CU push-in 7.0-end.
 import { W, H, bind, lerp, clamp, easeOut, label, captions, groupWords, finish } from '../toon/toon.js';
 import { kpSeated } from '../toon/kp.js';
@@ -10,7 +10,7 @@ const META = await (await fetch('/data/meta.json')).json();
 const ENV = await (await fetch('/data/env.json')).json();
 export const DUR = META.dur;
 let c, groups = [], main;
-const KEYS = /^(chakri|sau|sasta|g\*\*nd)/i;
+const KEYS = /^(chakri|sau|paanch|sasta|thoda|g\*\*nd)/i;
 export function init(cx, w) { c = main = cx; bind(c); groups = groupWords(w) }
 const env = (k, t) => { const a = ENV[k]; return a ? (a[Math.min(a.length - 1, Math.max(0, Math.floor(t * 30)))] || 0) : 0 };
 const sm = (u) => { u = clamp(u, 0, 1); return u * u * (3 - 2 * u) };
@@ -50,7 +50,7 @@ function shop(t) {
   const hold = { ...ik(SX, true, 'near', SX - 150, 700), hand: 'fist' };
   const up = seg(t, S1s - .35, S1s + .1) * (1 - seg(t, K2e + .1, K2e + 1.1));       // raises a chakri to show it, lowers it slowly after the bargain
   if (t < S1s - .3) { f = { brow: .15, look: [.9, 0], mouth: 'smile', wide: .22 }; tilt = Math.sin(t * 2) * .01; if (blink(t, .7)) f = { ...f, closed: 'flat' } }
-  else if (t < K2s - .2) { const sp = talkS(t); f = { brow: -.15, browUp: .4, look: [.9, -.05], mouth: 'smirk', wide: .26, ...(sp || {}) }; tilt = -.05; nod = -.15 + Math.sin(t * 6) * .04; lean = -.02 }   // smug, chin up: "Do sau ki."
+  else if (t < K2s - .2) { const sp = talkS(t); f = { brow: -.15, browUp: .4, look: [.9, -.05], mouth: 'smirk', wide: .26, ...(sp || {}) }; tilt = -.05; nod = -.15 + Math.sin(t * 6) * .04; lean = -.02 }   // smug, chin up: "Paanch sau ki."
   else if (t < K2e - .2) { f = { brow: -.05, look: [.9, 0], mouth: 'flat', wide: .22 }; tilt = -.02; nod = -.05 + seg(t, K2s, K2e) * .12 }   // smile slowly dies while he listens
   else { // quiet disappointment: heavy lids, inner brows up, small frown, eyes drop, a slow head shake and a long sigh
     const u = t - K2e, shake = Math.sin(u * 3.2) * .05 * seg(u, .2, .8) * (1 - seg(u, 1.6, 2.2));

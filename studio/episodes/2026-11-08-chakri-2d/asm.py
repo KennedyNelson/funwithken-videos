@@ -3,7 +3,7 @@
 import numpy as np, json, re, subprocess
 from scipy.io import wavfile
 L = json.load(open('lines.json')); SR = 16000
-files = ['raw/k1.mp3', 'raw/s1.mp3', 'raw/k2.mp3']; tempo = [1.0, 1.0, 1.0]
+files = ['raw/k1.mp3', 'raw/s1.mp3', 'raw/k2.mp3']; tempo = [1.0, 1.0, 1.2]
 def load(f, tp):
     af = f'silenceremove=start_periods=1:start_threshold=-38dB:start_silence=0.03,areverse,silenceremove=start_periods=1:start_threshold=-38dB:start_silence=0.05,areverse,atempo={tp},loudnorm=I=-15:TP=-1.5'
     p = subprocess.run(['ffmpeg', '-nostdin', '-v', 'error', '-i', f, '-af', af, '-ac', '1', '-ar', str(SR), '-f', 'f32le', '-'], capture_output=True).stdout
