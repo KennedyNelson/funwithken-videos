@@ -37,3 +37,11 @@ Pace (2026-11-07 Mom 5 min): 21.5 s, 8 short lines, 16 shots (cut every 0.7-2.5 
 - voices (ElevenLabs eleven_v4_turbo): Kalu = Roger (chill tags, slowed to .95), Battery = Armaan, Kalu's mom = Keshavi, Battery's mom (phone, band-passed) = Rysa. About 400 credits across all takes and retakes (not re-checked).
 - lessons: owner rejected v1 (exaggerated crash, drip pole, tears, chappal, repeated lines, hand-only mom) and v2 (weird hair, no sunglasses, unneeded lines). See skill OWNER'S CLEAN-AND-REAL RULES.
 - source: studio/episodes/2026-11-08-sharma-ji (ep-sharma.js)
+
+## 2026-11-09 | YouTube | Type 1 funny knowledge | "Why Mosquitoes Bite Only You (100x Tastier)"
+- link: https://www.youtube.com/watch?v=otUzPSHAY98 (public, category 27 Education, default lang en, audio hi)
+- idea: rooftop at dusk, mosquitoes swarm only Battery while Kalu sips chai. Kalu (flat): some people are up to 100x tastier to mosquitoes / Battery: "Haan... woh main hoon." / skin oil + bacteria make a smell, mosquitoes follow it (picture insert) / Battery will bathe twice / Kalu: no difference, shampoo or food, same smell 3 years later / Battery: "Toh main kya karun?" / Kalu: "Paas hi baith. Tere hote, mujhe koi nahi kaatta." (one mosquito tries Kalu, goes back). Takeaway + sources in studio/episodes/2026-11-09-mosquito/script.json (Cell 2022, Vosshall lab)
+- style: Desi Goggle-Eye Toon, Kalu CANON (fedora, sunglasses, black suit) + Battery (black specs); new set: rooftop terrace at golden dusk (black water tank, clothesline, parapet, tiled floor, blue plastic chairs); skin close-up insert (oil glints, tiny bacteria, smell trails) — src/stickman-gary/ep-mosquito.js
+- voices: ElevenLabs eleven_v4, Kalu = Roger (relaxed/deadpan, normal speed, atempo 1.0), Battery = Armaan; Devanagari; BGM sunny; no retakes needed (burst check clean, Kalu ~4.3 syl/s)
+- credits: 202 used (28,784 of 30,234 left, resets about 2026-12-08)
+- pace: 28.3 s, 7 lines, ~10 shots (cut on every line, 1-3 s), 4.7 s picture insert for the science, final wider push-in for the mosquito-visits-Kalu gag, abrupt end on Kalu's sip (loops to the opening contrast). Research: Composio wallet still empty (scrapecreators failed for credits); used web search.
